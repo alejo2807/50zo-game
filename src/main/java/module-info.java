@@ -1,12 +1,14 @@
-module org.example._Ozo {
+module org.example._50zo {
     requires javafx.controls;
     requires javafx.fxml;
 
-    opens game50zo to javafx.fxml;
-    opens game50zo.Controller to javafx.fxml;
+    // Abres los paquetes que contienen controladores a JavaFX
+    opens Controller to javafx.fxml;
+    opens View to javafx.fxml;
 
-    exports game50zo;
-    exports game50zo.Controller;
-    exports game50zo.Model;
-    exports game50zo.View;
+    // Exportas los paquetes principales
+    exports Controller;
+    exports Model;
+    exports View;
+    exports Model.Cards;
 }

@@ -1,0 +1,68 @@
+/* Casino Style Buttons for JavaFX */
+
+/* Play Button */
+.play-button {
+    -fx-background-color: linear-gradient(to bottom, #c9a961, #9d7d3a);
+    -fx-background-radius: 15;
+    -fx-border-color: #f4e4c1;
+    -fx-border-width: 3;
+    -fx-border-radius: 15;
+    -fx-text-fill: #1a3d1a;
+    -fx-font-family: "Georgia", "Serif";
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-padding: 20 60 20 60;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 15, 0.5, 0, 5);
+    -fx-cursor: hand;
+}
+
+.play-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #dbb76e, #b89448);
+    -fx-border-color: #ffffff;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 20, 0.6, 0, 7);
+}
+
+.play-button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #9d7d3a, #7a5f2b);
+    -fx-translate-y: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.3, 0, 2);
+}
+
+/* Exit Button */
+.exit-button {
+    -fx-background-color: linear-gradient(to bottom, #8b2e2e, #5c1e1e);
+    -fx-background-radius: 15;
+    -fx-border-color: #c9a961;
+    -fx-border-width: 3;
+    -fx-border-radius: 15;
+    -fx-text-fill: #f4e4c1;
+    -fx-font-family: "Georgia", "Serif";
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-padding: 20 60 20 60;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 15, 0.5, 0, 5);
+    -fx-cursor: hand;
+}
+
+.exit-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #a33838, #6d2424);
+    -fx-border-color: #f4e4c1;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 20, 0.6, 0, 7);
+}
+
+.exit-button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #5c1e1e, #3d1414);
+    -fx-translate-y: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.3, 0, 2);
+}
+
+/* Optional: Container styling for button layout */
+.button-container {
+    -fx-spacing: 30;
+    -fx-alignment: center;
+    -fx-padding: 50;
+}

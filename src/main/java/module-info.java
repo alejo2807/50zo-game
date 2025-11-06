@@ -1,8 +1,12 @@
-module org.example._0zo {
+module org.example._Ozo {
     requires javafx.controls;
     requires javafx.fxml;
 
+    opens game50zo to javafx.fxml;
+    opens game50zo.Controller to javafx.fxml;
 
-    opens org.example._0zo to javafx.fxml;
-    exports org.example._0zo;
+    exports game50zo;
+    exports game50zo.Controller;
+    exports game50zo.Model;
+    exports game50zo.View;
 }

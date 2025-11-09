@@ -12,6 +12,18 @@ public class Card {
     public Card(String symbol, String url) {
         this.symbol = symbol;
         this.url = url;
+        if(valores2_8.contains(this.symbol)){
+            setValue(Integer.parseInt(this.symbol));
+        }
+        else if(valoresJQK.contains(this.symbol)){
+            setValue(-10);
+        }
+        else if(symbol.equals("9")){
+            setValue(0);
+        }
+        else if(symbol.equals("A")){
+            setValue(10);//for default
+        }
     }
 
     public void setValue(int value) {

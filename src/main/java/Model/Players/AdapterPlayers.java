@@ -17,12 +17,14 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     protected Deck deck;
     public AdapterPlayers(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile){
         this.deck = deck;
-        takeHand();
         this.isPlaying = false;
         this.turn = myTurn;
         this.lock = lock;
         this.turnManager = turnManager;
         this.cardPile = cardPile;
+        }
+        public AdapterPlayers(Deck deck){
+        this.deck = deck;
         }
 
     @Override
@@ -43,6 +45,11 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
             hand.add(deck.getCard());
         }
     }
+    @Override
+    public List<Card> getHand(){
+        return hand;
+    }
+
 
 
     boolean getIsPlaying(){

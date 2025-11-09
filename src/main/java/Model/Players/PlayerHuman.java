@@ -14,6 +14,10 @@ public class PlayerHuman extends AdapterPlayers {
 
     public PlayerHuman(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile) {
         super(deck, myTurn, lock, turnManager, cardPile);
+        takeHand();
+    }
+    public PlayerHuman(Deck deck) {
+        super(deck);
     }
     @Override
     public void run() {
@@ -33,8 +37,5 @@ public class PlayerHuman extends AdapterPlayers {
             }
     }
 
-    public List<Card> getCards(){
-        List<Card> cards = new ArrayList<>();
-    }
 
 }

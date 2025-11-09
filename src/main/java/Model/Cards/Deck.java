@@ -43,6 +43,15 @@ public class Deck {
 
 
     }
+    public Deque<Card> getDeck() {return deck;}
 
+    public static void main(String[] args) {
+        Deck deck = new Deck();
+        Card card = deck.getCard();
+        System.out.printf("Card: %s\n", card.getSymbol());
+       for(Card c : deck.getDeck()){
+           System.out.println(c.getSymbol());
+       }
+    }
 
 }

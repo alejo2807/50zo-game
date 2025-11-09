@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-import java.awt.event.MouseEvent;
+import javafx.scene.input.MouseEvent;
 import java.util.List;
 
 public class GameWindowController {
@@ -23,11 +23,15 @@ public class GameWindowController {
     Object lock = new Object();
     CardPile cardPile = new CardPile();
     PlayerHuman playerHuman = new PlayerHuman(deck, 1, lock,turnManager, cardPile);
+
+
     @FXML
-    private void handleCardClick(MouseEvent event) {
+    void handleCardClick(MouseEvent event) {
         ImageView clickedImage = (ImageView) event.getSource();
         int index = playerHand.getChildren().indexOf(clickedImage);
-        Card selectedCard = playerHuman.getCards().get(index);
+        System.out.println(index);
+        System.out.println(playerHuman.getHand());
+        Card selectedCard = playerHuman.getHand().get(index);
         System.out.println(selectedCard.getSymbol() + " " + selectedCard.getValue());
     }
 

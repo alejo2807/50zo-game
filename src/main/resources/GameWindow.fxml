@@ -42,22 +42,22 @@
       </HBox>
       <HBox fx:id="playerHand" layoutX="41.0" layoutY="32.0" prefHeight="165.0" prefWidth="437.0">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="card4" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@deck/back_red.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="card3" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@deck/back_red.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="172.0" fitWidth="129.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="card2" fitHeight="172.0" fitWidth="129.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@deck/back_red.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="172.0" fitWidth="128.0" onMouseClicked="#handleCardClick">
+            <ImageView fx:id="card1" fitHeight="172.0" fitWidth="128.0" onMouseClicked="#handleCardClick">
                <image>
                   <Image url="@deck/back_red.png" />
                </image>

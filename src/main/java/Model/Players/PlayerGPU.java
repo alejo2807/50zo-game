@@ -30,7 +30,7 @@ public class PlayerGPU extends AdapterPlayers {
 
                 putCard(choseCard(), cardPile);
                 try{
-                    Thread.sleep(2000);
+                    Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 2001));
                 }
                 catch (Exception e){
                     e.printStackTrace();

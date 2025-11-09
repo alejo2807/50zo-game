@@ -4,6 +4,9 @@ import Model.Cards.Card;
 import Model.Cards.CardPile;
 import Model.Cards.Deck;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerHuman extends AdapterPlayers {
     private Thread thread;
     private int indexCard;
@@ -30,8 +33,8 @@ public class PlayerHuman extends AdapterPlayers {
             }
     }
 
-    public void setIndexCard(int index){
-        this.indexCard = index;
+    public List<Card> getCards(){
+        List<Card> cards = new ArrayList<>();
     }
 
 }

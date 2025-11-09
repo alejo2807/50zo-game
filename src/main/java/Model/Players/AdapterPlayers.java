@@ -17,7 +17,7 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     protected Deck deck;
     public AdapterPlayers(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile){
         this.deck = deck;
-        takeHand(deck);
+        takeHand();
         this.isPlaying = false;
         this.turn = myTurn;
         this.lock = lock;
@@ -37,7 +37,7 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
 
     }
     @Override
-    public void takeHand(Deck deck){
+    public void takeHand(){
         hand.clear();
         for (int i = 0; i <4 ; i++) {
             hand.add(deck.getCard());

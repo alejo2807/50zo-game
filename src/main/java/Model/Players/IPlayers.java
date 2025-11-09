@@ -8,6 +8,6 @@ public interface IPlayers {
     void takeCard(Card card);
     void putCard(int IndexCard, CardPile cardPile);
 
-    void takeHand(Deck deck);
+    void takeHand();
 
 }

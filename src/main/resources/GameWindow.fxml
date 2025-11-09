@@ -2,14 +2,99 @@
 
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1240.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1240.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="800.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@backgroundImages/initialScreen1.png" />
+         </image>
+      </ImageView>
+      <HBox layoutX="50.0" layoutY="590.0" prefHeight="165.0" prefWidth="437.0">
+         <children>
+            <HBox prefHeight="165.0" prefWidth="437.0">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@deck/back_red.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@deck/back_red.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@deck/back_red.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@deck/back_red.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      <HBox layoutX="41.0" layoutY="32.0" prefHeight="165.0" prefWidth="437.0">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@deck/back_red.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@deck/back_red.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="172.0" fitWidth="129.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@deck/back_red.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="172.0" fitWidth="128.0">
+               <image>
+                  <Image url="@deck/back_red.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <HBox layoutX="692.0" layoutY="48.0" prefHeight="165.0" prefWidth="437.0">
+         <children>
+            <HBox prefHeight="190.0" prefWidth="474.0">
+               <children>
+                  <ImageView fitHeight="177.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@deck/back_red.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="177.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@deck/back_red.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="178.0" fitWidth="122.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@deck/back_red.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="192.0" fitWidth="122.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@deck/back_red.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="134.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@deck/back_red.png" />
          </image>
       </ImageView>
    </children>

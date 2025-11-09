@@ -2,57 +2,73 @@ package Model.Players;
 
 import Model.Cards.CardPile;
 import Model.Cards.Deck;
-
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+import Model.Cards.Card;
+import Controller.GameWindowController;
+import javafx.application.Platform;
 
 public class PlayerGPU extends AdapterPlayers {
-        public PlayerGPU(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile){
-            super(deck, myTurn, lock, turnManager, cardPile);
-        }
+
+    private GameWindowController controller;
+
+    public PlayerGPU(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile, GameWindowController controller) {
+        super(deck, myTurn, lock, turnManager, cardPile);
+        this.controller = controller;
+    }
+
     @Override
     public void run() {
-        while(true){
-            synchronized (lock){
-                while(turnManager.getActualTurn() != turn){
+        hasValidCards();
+        while (isPlaying) {
+            synchronized (lock) {
+                while (turnManager.getActualTurn() != turn) {
                     try {
                         lock.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-                try{
-                    Thread.sleep( ThreadLocalRandom.current().nextInt(2000, 4001));
+                hasValidCards();
+                if (!isPlaying) {
+                    System.out.println("GPU " + turn + " queda fuera: sin jugadas válidas.");
+                    turnManager.passTurn();
+                    lock.notifyAll();
+                    continue;
                 }
-                catch (Exception e){
+                try {
+                    // Simula tiempo de "pensar"
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                putCard(choseCard(), cardPile);
-                try{
-                    Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 2001));
+                // GPU juega la primera carta de su mano
+                if (!hand.isEmpty()) {
+                    Card cardPlayed = hand.get(0);
+                    putCard(0, cardPile);
+
+                    // Actualiza la pila visualmente
+                    Platform.runLater(() -> controller.updatePileImage(cardPlayed));
                 }
-                catch (Exception e){
+
+                try {
+                    // Pequeña pausa antes de tomar carta
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                takeCard(deck.getCard());
 
+                // Toma nueva carta si el mazo no está vacío
+                if (!deck.getDeck().isEmpty()) {
+                    takeCard(deck.getCard());
+                }
+
+                // Actualiza interfaz (cartas de GPU con reverso)
+                Platform.runLater(() -> controller.printCardsGPU());
+
+                // Pasa turno al siguiente jugador
                 turnManager.passTurn();
                 lock.notifyAll();
             }
         }
-    }
-    //ojo, toca hacer un metodo que verifique que tenga cartas validas, y que si  no tiene, deje de jugar, que se valide aca si el jugador ha perdido primero
-    public int choseCard(){
-            Random rand = new Random();
-            int index;
-            while(true){
-                index = rand.nextInt(3);
-                if(hand.get(index).getValue() + cardPile.getValuePile() <= 50){
-                    break;
-                }
-            }
-            return index;
-
     }
 }

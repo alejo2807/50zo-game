@@ -15,6 +15,7 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     protected TurnManager turnManager;
     protected CardPile cardPile;
     protected Deck deck;
+
     public AdapterPlayers(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile){
         this.deck = deck;
         this.isPlaying = false;
@@ -22,6 +23,7 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
         this.lock = lock;
         this.turnManager = turnManager;
         this.cardPile = cardPile;
+
         }
         public AdapterPlayers(Deck deck){
         this.deck = deck;
@@ -42,7 +44,9 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     public void takeHand(){
         hand.clear();
         for (int i = 0; i <4 ; i++) {
-            hand.add(deck.getCard());
+
+            Card card = deck.getCard();
+            hand.add(card);
         }
     }
     @Override
@@ -52,7 +56,8 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
 
 
 
-    boolean getIsPlaying(){
+
+   public boolean getIsPlaying(){
         return isPlaying;
     }
     void setIsPlaying(boolean isPlaying){
@@ -67,6 +72,12 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
             }
         }
         isPlaying = cont != 0;
+    }
+    public boolean getIsplaying(){
+        return isPlaying;
+    }
+    public int getTurn(){
+        return turn;
     }
     public void initializePlayer(){
         isPlaying = true;

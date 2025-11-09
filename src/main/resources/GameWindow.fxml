@@ -1,101 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1240.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.GameWindowController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="857.0" prefWidth="1302.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.GameWindowController">
    <children>
-      <ImageView fitHeight="800.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="874.0" fitWidth="1452.0" layoutX="-4.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@backgroundImages/initialScreen1.png" />
          </image>
       </ImageView>
-      <HBox layoutX="50.0" layoutY="590.0" prefHeight="165.0" prefWidth="437.0">
+      <HBox fx:id="cardsGPU1" layoutX="83.0" layoutY="45.0" prefHeight="193.0" prefWidth="498.0">
          <children>
-            <HBox prefHeight="165.0" prefWidth="437.0">
-               <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@deck/back_red.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@deck/back_red.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@deck/back_red.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@deck/back_red.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
+            <ImageView fx:id="card4" fitHeight="185.0" fitWidth="121.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card3" fitHeight="184.0" fitWidth="121.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card2" fitHeight="185.0" fitWidth="121.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card1" fitHeight="176.0" fitWidth="135.0" />
          </children>
       </HBox>
-      <HBox fx:id="playerHand" layoutX="41.0" layoutY="32.0" prefHeight="165.0" prefWidth="437.0">
-         <children>
-            <ImageView fx:id="card4" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@deck/back_red.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="card3" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@deck/back_red.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="card2" fitHeight="172.0" fitWidth="129.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@deck/back_red.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="card1" fitHeight="172.0" fitWidth="128.0" onMouseClicked="#handleCardClick">
-               <image>
-                  <Image url="@deck/back_red.png" />
-               </image>
-            </ImageView>
-         </children>
-      </HBox>
-      <HBox layoutX="692.0" layoutY="48.0" prefHeight="165.0" prefWidth="437.0">
-         <children>
-            <HBox prefHeight="190.0" prefWidth="474.0">
-               <children>
-                  <ImageView fitHeight="177.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@deck/back_red.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="177.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@deck/back_red.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="178.0" fitWidth="122.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@deck/back_red.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="192.0" fitWidth="122.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@deck/back_red.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
-         </children>
-      </HBox>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="134.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="177.0" fitWidth="142.0" layoutX="134.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@deck/back_red.png" />
          </image>
       </ImageView>
+      <HBox fx:id="playerCards" layoutX="724.0" layoutY="613.0" prefHeight="177.0" prefWidth="488.0">
+         <children>
+            <ImageView fitHeight="176.0" fitWidth="154.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@deck/back_red.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="176.0" fitWidth="132.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@deck/back_red.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="177.0" fitWidth="129.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@deck/back_red.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="177.0" fitWidth="130.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@deck/back_red.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <HBox fx:id="cardsGPU2" layoutX="83.0" layoutY="609.0" prefHeight="141.0" prefWidth="498.0">
+         <children>
+            <ImageView fx:id="card41" fitHeight="185.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card31" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card21" fitHeight="185.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card11" fitHeight="176.0" fitWidth="135.0" onMouseClicked="#handleCardClick" />
+         </children>
+      </HBox>
+      <HBox fx:id="cardsGPU3" layoutX="724.0" layoutY="63.0" prefHeight="177.0" prefWidth="488.0">
+         <children>
+            <ImageView fx:id="card411" fitHeight="185.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card311" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card211" fitHeight="185.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card111" fitHeight="176.0" fitWidth="135.0" onMouseClicked="#handleCardClick" />
+         </children>
+      </HBox>
+      <Button fx:id="takeCard" layoutX="938.0" layoutY="540.0" mnemonicParsing="false" onAction="#takeCard" text="Button" />
+      <ImageView fx:id="cardPile" fitHeight="150.0" fitWidth="148.0" layoutX="577.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="valuePile" layoutX="641.0" layoutY="489.0" text="Label" textFill="WHITE" />
    </children>
 </Pane>

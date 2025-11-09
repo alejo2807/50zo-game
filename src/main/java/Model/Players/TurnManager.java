@@ -9,7 +9,7 @@ public class TurnManager {
         return actualTrurn;
     }
     public void passTurn(){
-        if(actualTrurn == 3){
+        if(actualTrurn == 4){
             actualTrurn = 1;
         }
         else{

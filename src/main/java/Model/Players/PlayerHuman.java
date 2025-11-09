@@ -21,21 +21,37 @@ public class PlayerHuman extends AdapterPlayers {
     }
     @Override
     public void run() {
-            while(isPlaying){
-                synchronized (lock){
-                        while(turnManager.getActualTurn() != turn){
-                            try {
-                                lock.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        putCard(indexCard, cardPile);
-                        //turnManager.passTurn(); no deberia de venir aca
-                        lock.notifyAll();
+
+        while (isPlaying) {
+            synchronized (lock) {
+                while (turnManager.getActualTurn() != turn) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                hasValidCards();
+                if (!isPlaying) {
+                    System.out.println("Jugador " + turn + " ya no puede jugar.");
+                    turnManager.passTurn();
+                    lock.notifyAll();
+                    break; // o continue según tu lógica
+                }
+                // 🕐 Esperar hasta que el controlador le notifique que terminó su jugada
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
+        }
     }
+
+    public void setIndexCard(int indexCard) {
+        this.indexCard = indexCard;
+    }
+
 
 
 }

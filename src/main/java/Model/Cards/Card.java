@@ -6,7 +6,7 @@ public class Card {
 	private int value;
     private String symbol;
     private String url;
-    List<String> valores2_8 =  Arrays.asList("2","3","4","5","6","7","8");
+    List<String> valores2_8 =  Arrays.asList("2","3","4","5","6","7","8","10");
     List<String> valoresJQK = Arrays.asList("J", "Q","K");
 
     public Card(String symbol, String url) {

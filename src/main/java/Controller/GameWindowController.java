@@ -4,6 +4,7 @@ import Model.Cards.Card;
 import Model.Cards.CardPile;
 import Model.Cards.Deck;
 import Model.Cards.RechargeDeck;
+import Model.Exceptions.InvalidCardException;
 import Model.Players.PlayerGPU;
 import Model.Players.PlayerHuman;
 import Model.Players.TurnManager;
@@ -14,14 +15,21 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameWindowController {
 
     @FXML private HBox playerCards, cardsGPU1, cardsGPU2, cardsGPU3;
     @FXML private ImageView cardPile; // Imagen de la pila en el centro
+    @FXML private Label valuePile;
+    @FXML
+    private ImageView deckImg;
+
+    @FXML
+    private StackPane deckStack;
+
     private RechargeDeck rechargeDeck;
     private Deck deck;
     private TurnManager turnManager;
@@ -41,13 +49,12 @@ public class GameWindowController {
         pile = new CardPile(deck);
         rechargeDeck = new RechargeDeck(deck, pile);
         rechargeDeck.start();
-        // Crear jugadores
+
         playerHuman = new PlayerHuman(deck, 1, lock, turnManager, pile);
         playerGPU1 = new PlayerGPU(deck, 2, lock, turnManager, pile, this);
         playerGPU2 = new PlayerGPU(deck, 3, lock, turnManager, pile, this);
         playerGPU3 = new PlayerGPU(deck, 4, lock, turnManager, pile, this);
 
-        // Inicializar manos
         playerHuman.initializePlayer();
         playerGPU1.initializePlayer();
         playerGPU2.initializePlayer();
@@ -59,16 +66,21 @@ public class GameWindowController {
         printCardsGPU();
         updatePileImage(pile.getTopCard());
 
-        // Iniciar los hilos
+        // Arrancan los hilos PERO el turno aún no está activo
         playerHuman.start();
         playerGPU1.start();
         playerGPU2.start();
         playerGPU3.start();
 
+        // Inicia oficialmente el turno 1
+        synchronized (lock) {
+            turnManager.startGame();
+            lock.notifyAll();
+        }
     }
 
     // ------------------------------------------------------------
-    // 🂠 Muestra las cartas del jugador humano
+    // Muestra las cartas del jugador humano
     void printCardsHuman() {
         for (int i = 0; i < 4; i++) {
             ImageView imageView = (ImageView) playerCards.getChildren().get(i);
@@ -82,8 +94,8 @@ public class GameWindowController {
     }
 
     // ------------------------------------------------------------
-    // 🂡 Muestra el reverso de las cartas de las GPUs activas
-   public void printCardsGPU() {
+    // Muestra el reverso de las cartas de las GPUs activas
+    public void printCardsGPU() {
         List<HBox> boxes = List.of(cardsGPU1, cardsGPU2, cardsGPU3);
         Image backImage = new Image(getClass().getResourceAsStream("/deck/back_red.png"));
 
@@ -103,60 +115,92 @@ public class GameWindowController {
     }
 
     // ------------------------------------------------------------
-    // 🖱 Evento de clic en carta del jugador humano
+    // Evento de clic en carta del jugador humano
     @FXML
     void handleCardClick(MouseEvent event) {
-        if (turnManager.getActualTurn() != playerHuman.getTurn()) return; // No es su turno
-        if (cardPlayed) return; // Ya jugó
+        if (turnManager.getActualTurn() != playerHuman.getTurn()) {
+            System.out.println("⚠️ No es tu turno.");
+            return;
+        }
+
+        if (cardPlayed) {
+            System.out.println("⚠️ Ya jugaste una carta este turno.");
+            return;
+        }
 
         ImageView clickedImage = (ImageView) event.getSource();
         int index = playerCards.getChildren().indexOf(clickedImage);
-        playerHuman.setIndexCard(index);
 
-        // 🃏 Poner la carta en la pila
-        playerHuman.putCard(index, pile);
-        cardPlayed = true;
-
-        // Mostrar la carta superior en la pila
-        Card top = pile.getTopCard();
-        if (top != null) {
-            Image pileImage = new Image(getClass().getResourceAsStream(top.getUrl()));
-            cardPile.setImage(pileImage);
-            valuePile.setText(String.valueOf(pile.getValuePile()));
+        // Verificar que el índice sea válido
+        if (index < 0 || index >= playerHuman.getHand().size()) {
+            System.out.println("⚠️ Carta no válida.");
+            return;
         }
 
-        // Actualizar mano
-        printCardsHuman();
+        playerHuman.setIndexCard(index);
+
+        try {
+            // Intentar jugar la carta
+            playerHuman.putCard(index, pile);
+            cardPlayed = true;
+
+            Card top = pile.getTopCard();
+            if (top != null) {
+                Image pileImage = new Image(getClass().getResourceAsStream(top.getUrl()));
+                cardPile.setImage(pileImage);
+                valuePile.setText(String.valueOf(pile.getValuePile()));
+            }
+
+            printCardsHuman();
+            System.out.println("✅ Jugaste: " + top.getSymbol() + " | Nuevo valor pila: " + pile.getValuePile());
+
+        } catch (InvalidCardException e) {
+            // Carta inválida - mostrar mensaje y no hacer nada
+            System.out.println(e.getDetailedMessage());
+            // La carta NO se jugó, el jugador debe elegir otra
+        }
     }
 
     // ------------------------------------------------------------
-    // 🃏 Botón para tomar carta y pasar turno
+    // Botón para tomar carta y pasar turno
     @FXML
     void takeCard(ActionEvent event) {
-        System.out.println(deck.getDeck());
+        System.out.println("Mazo actual: " + deck.getDeck().size() + " cartas");
+
+        // Verificar que sea el turno del humano
+        if (turnManager.getActualTurn() != playerHuman.getTurn()) {
+            System.out.println("⚠️ No es tu turno.");
+            return;
+        }
+
         if (!cardPlayed) {
-            System.out.println("takeCard() ignorado: aún no se ha jugado carta.");
-            return; // Solo si ya jugó
+            System.out.println("⚠️ Debes jugar una carta antes de tomar una nueva.");
+            return;
         }
 
         Card newCard = deck.getCard();
         if (newCard == null) {
-            System.out.println("takeCard(): el mazo está vacío.");
+            System.out.println("⚠️ El mazo está vacío.");
             return;
         }
 
         playerHuman.takeCard(newCard);
-        System.out.println("takeCard(): robó -> " + newCard.getSymbol() + " valor=" + newCard.getValue());
+        System.out.println("✅ Robaste: " + newCard.getSymbol() + " (valor=" + newCard.getValue() + ")");
         printCardsHuman();
 
-        // pasa turno y notifica
+        // Finaliza el turno del jugador humano
         synchronized (lock) {
-            turnManager.passTurn(); // Pasa el turno al siguiente
-            cardPlayed = false;
-            lock.notifyAll(); // Despierta los demás hilos
+            cardPlayed = false;         // Resetear para el próximo turno
+            playerHuman.finishTurn();   // Notificar al hilo que terminó
+            turnManager.passTurn();     // Cambiar al siguiente jugador
+            lock.notifyAll();           // Despertar todos los hilos
         }
+
+        System.out.println("🔄 Turno pasado a jugador " + turnManager.getActualTurn());
     }
 
+    // ------------------------------------------------------------
+    // Actualiza la imagen de la pila
     public void updatePileImage(Card topCard) {
         if (topCard != null) {
             Image image = new Image(getClass().getResourceAsStream(topCard.getUrl()));
@@ -164,5 +208,11 @@ public class GameWindowController {
         }
         valuePile.setText(String.valueOf(pile.getValuePile()));
     }
-    @FXML private Label valuePile;
+
+    public void updateDeckVisual() {
+        if (deckStack.getChildren().size() > 1) {
+            deckStack.getChildren().remove(deckStack.getChildren().size() - 1);
+        }
+    }
+
 }

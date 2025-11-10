@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Queue;
 
 public class CardPile {
-    private Queue<Card> cardPile = new LinkedList<>();
+    private Queue<Card> cardPile;
     private int valuePile;
 
     public CardPile(Deck deck) {
+        cardPile = new LinkedList<>();
         Card card = deck.getCard();
         cardPile.add(card);
         valuePile = card.getValue();

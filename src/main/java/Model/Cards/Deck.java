@@ -53,5 +53,11 @@ public class Deck {
            System.out.println(c.getSymbol());
        }
     }
-
+    public void shuffle(){
+        // Opción 1: Más simple y segura
+        List<Card> tempList = new ArrayList<>(deck); // Copia directa
+        deck.clear(); // Vacía la pila
+        Collections.shuffle(tempList); // Baraja la lista temporal
+        deck.addAll(tempList); // Agrega todas de vuelta
+    }
 }

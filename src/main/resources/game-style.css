@@ -1,0 +1,85 @@
+/* === Estilos generales para las cartas === */
+.image-view {
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 5, 0, 0, 3);
+    -fx-transition: all 0.3s ease;
+}
+
+/* 🌟 Efecto al pasar el mouse sobre las cartas del jugador */
+#playerCards .image-view:hover {
+    -fx-translate-y: -15px; /* se eleva */
+    -fx-effect: dropshadow(gaussian, rgba(255,255,150,0.9), 20, 0, 0, 0); /* luz amarilla */
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-opacity: 1;
+}
+
+/* === Simulación de mazo (deck) === */
+.deck-card {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0, 3, 3);
+}
+
+/* Crea separación visual entre las capas del mazo */
+#deck-stack .image-view {
+    -fx-translate-y: 0;
+}
+
+/* Base para todas las cartas del mazo */
+.deckCard {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0, 3, 3);
+}
+
+
+//* ==== Estilo base del botón transparente con imagen ==== */
+#takeCard {
+    -fx-background-color: transparent; /* sin fondo sólido */
+    -fx-background-image: url("takeCard.png");
+    -fx-background-size: contain; /* mantiene proporciones */
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 12 30 12 30;
+    -fx-cursor: hand;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 10, 0.4, 0, 2);
+    -fx-transition: all 0.3s ease;
+}
+
+/* ✨ Hover - agranda ligeramente y aumenta brillo */
+#takeCard:hover {
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+    -fx-opacity: 0.95;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.6), 20, 0.6, 0, 0);
+    -fx-text-fill: #fff8b0;
+}
+
+/* 🔘 Al presionar */
+#takeCard:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 6, 0.4, 0, 1);
+}
+
+/* 🕊️ Animación suave al soltar */
+#takeCard {
+    -fx-transition: all 0.25s ease-in-out;
+}
+
+
+
+/* === Espaciado entre cartas de todos los jugadores === */
+#playerCards,
+#cardsGPU1,
+#cardsGPU2,
+#cardsGPU3 {
+    -fx-spacing: 15px; /* separa las cartas dentro del HBox */
+    -fx-alignment: center;
+}

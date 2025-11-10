@@ -43,6 +43,21 @@ public class Deck {
 
 
     }
+    public Deque<Card> getDeck() {return deck;}
 
-
+    public static void main(String[] args) {
+        Deck deck = new Deck();
+        Card card = deck.getCard();
+        System.out.printf("Card: %s\n", card.getSymbol());
+       for(Card c : deck.getDeck()){
+           System.out.println(c.getSymbol());
+       }
+    }
+    public void shuffle(){
+        // Opción 1: Más simple y segura
+        List<Card> tempList = new ArrayList<>(deck); // Copia directa
+        deck.clear(); // Vacía la pila
+        Collections.shuffle(tempList); // Baraja la lista temporal
+        deck.addAll(tempList); // Agrega todas de vuelta
+    }
 }

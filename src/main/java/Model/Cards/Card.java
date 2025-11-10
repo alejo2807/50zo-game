@@ -6,12 +6,24 @@ public class Card {
 	private int value;
     private String symbol;
     private String url;
-    List<String> valores2_8 =  Arrays.asList("2","3","4","5","6","7","8");
+    List<String> valores2_8 =  Arrays.asList("2","3","4","5","6","7","8","10");
     List<String> valoresJQK = Arrays.asList("J", "Q","K");
 
     public Card(String symbol, String url) {
         this.symbol = symbol;
         this.url = url;
+        if(valores2_8.contains(this.symbol)){
+            setValue(Integer.parseInt(this.symbol));
+        }
+        else if(valoresJQK.contains(this.symbol)){
+            setValue(-10);
+        }
+        else if(symbol.equals("9")){
+            setValue(0);
+        }
+        else if(symbol.equals("A")){
+            setValue(10);//for default
+        }
     }
 
     public void setValue(int value) {

@@ -1,7 +1,6 @@
 module org.example._50zo {
     requires javafx.controls;
     requires javafx.fxml;
-    requires org.example._50zo;
     requires java.desktop;
 
     // Abres los paquetes que contienen controladores a JavaFX

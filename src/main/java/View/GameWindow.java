@@ -1,51 +1,60 @@
 package View;
 
+import Controller.GameWindowController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import Controller.GameWindowController;
+
 import java.io.IOException;
 
 public class GameWindow extends Stage {
 
-    private GameWindowController controller;
 
-    private GameWindow() throws IOException {
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/GameWindow.fxml")
-        );
-        Parent root = loader.load();
+        private GameWindow(int playersGPU) throws IOException{
+            GameWindowController gameWindowController = new GameWindowController();
+            gameWindowController.getPlayersGPU(playersGPU);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GameWindow.fxml"));
+            fxmlLoader.setController(gameWindowController);
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            this.setScene(scene);
+            this.setTitle("50zo");
+            this.setResizable(false);
+            this.initStyle(javafx.stage.StageStyle.UNDECORATED);
 
-        // Guardar referencia al controlador
-        controller = loader.getController();
 
-        Scene scene = new Scene(root);
-        this.setScene(scene);
-        this.setTitle("El Cincuentazo");
-        this.setResizable(false);
-    }
 
-    private static class Holder {
-        private static GameWindow INSTANCE = null;
-    }
+        }
+        private static class Holder{
+            private static GameWindow INSTANCE = null;
 
-    public static GameWindow getInstance() throws IOException {
-        Holder.INSTANCE = (Holder.INSTANCE != null)
-                ? Holder.INSTANCE
-                : new GameWindow();
+
+
+        }
+    public static GameWindow getInstance(int playersGPU) throws IOException{
+        if(Holder.INSTANCE == null){
+            Holder.INSTANCE = new GameWindow(playersGPU);
+        }
         return Holder.INSTANCE;
+
+
+    }
+    public static void showInstance() throws IOException {
+        Holder.INSTANCE.show();
     }
 
-    public void setNumPlayers(int numPlayers) {
-        if (controller != null) {
-            controller.setNumPlayers(numPlayers);
-        }
-    }
-
+    /**
+     * Closes the current instance of the {@link GameWindow}, if it exists.
+     * <p>
+     * This method does not destroy the instance — it simply hides the window.
+     * </p>
+     */
     public static void closeInstance() {
-        if (Holder.INSTANCE != null) {
-            Holder.INSTANCE.close();
-        }
+        Holder.INSTANCE.close();
     }
+
+
+
+
 }

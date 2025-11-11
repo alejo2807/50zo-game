@@ -39,11 +39,14 @@ public class GameWindowController {
     private PlayerHuman playerHuman;
     private PlayerGPU playerGPU;
     private List<PlayerGPU> playerGPUList;
-    private int totalPlayersGPU = 2;
+    private int totalPlayersGPU ;
     private boolean cardPlayed = false; // control de flujo humano
    /* public GameWindowController(int totalPlayersGPU) {
         this.totalPlayersGPU = totalPlayersGPU;
     }*/
+    public void getPlayersGPU(int totalPlayersGPU){
+        this.totalPlayersGPU = totalPlayersGPU;
+    }
     @FXML
     public void initialize() {
         deck = new Deck();

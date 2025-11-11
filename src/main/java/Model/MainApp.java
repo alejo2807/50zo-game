@@ -1,5 +1,6 @@
 package Model;
 
+import View.StartWindow;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,13 +11,8 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameWindow.fxml"));
-        Parent root = loader.load();
-
-        Scene scene = new Scene(root);
-        stage.setTitle("Juego de Cartas");
-        stage.setScene(scene);
-        stage.show();
+        StartWindow mainMenu = StartWindow.getInstance();
+        mainMenu.show();
     }
 
     public static void main(String[] args) {

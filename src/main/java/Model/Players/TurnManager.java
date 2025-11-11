@@ -2,7 +2,7 @@ package Model.Players;
 
 public class TurnManager {
     private int actualTurn;
-    private final int totalPlayers = 4;
+    private final int totalPlayers = 3;
 
     public TurnManager() {
         actualTurn = 0; // Comienza sin turno asignado

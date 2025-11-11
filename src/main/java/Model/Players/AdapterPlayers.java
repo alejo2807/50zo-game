@@ -19,7 +19,7 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
 
     public AdapterPlayers(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile){
         this.deck = deck;
-        this.isPlaying = true;  // 👈 CAMBIO 1: Inicializar en true
+        this.isPlaying = false;  // 👈 CAMBIO 1: Inicializar en true
         this.turn = myTurn;
         this.lock = lock;
         this.turnManager = turnManager;

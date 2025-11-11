@@ -2,10 +2,11 @@ package Model.Players;
 
 public class TurnManager {
     private int actualTurn;
-    private final int totalPlayers = 4;
+    private final int totalPlayers;
 
-    public TurnManager() {
+    public TurnManager(int totalPlayers) {
         actualTurn = 0; // Comienza sin turno asignado
+        this.totalPlayers = totalPlayers;
     }
 
     public synchronized int getActualTurn() {

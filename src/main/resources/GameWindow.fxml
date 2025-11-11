@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="953.0" prefWidth="1369.0" stylesheets="@game-style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.GameWindowController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="953.0" prefWidth="1369.0" stylesheets="@game-style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <ImageView fitHeight="964.0" fitWidth="1528.0" layoutX="-75.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
          <image>

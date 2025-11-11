@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameWindowController {
@@ -36,47 +37,62 @@ public class GameWindowController {
     private Object lock;
     private CardPile pile;
     private PlayerHuman playerHuman;
-    private PlayerGPU playerGPU1, playerGPU2, playerGPU3;
+    private PlayerGPU playerGPU;
     private List<PlayerGPU> playerGPUList;
-
+    private int totalPlayersGPU ;
     private boolean cardPlayed = false; // control de flujo humano
-
+   /* public GameWindowController(int totalPlayersGPU) {
+        this.totalPlayersGPU = totalPlayersGPU;
+    }*/
+    public void getPlayersGPU(int totalPlayersGPU){
+        this.totalPlayersGPU = totalPlayersGPU;
+    }
     @FXML
     public void initialize() {
         deck = new Deck();
-        turnManager = new TurnManager();
+        turnManager = new TurnManager(totalPlayersGPU+1);//porque mas 1? porque el turnmanager tiene en cuenta el turno del jugador, osea, si son 2 gpu es 1 jugador, entonces son 3 turnos
+
         lock = new Object();
+        // Inicia oficialmente el turno 1
+        synchronized (lock) {
+            turnManager.startGame();
+            lock.notifyAll();
+        }
         pile = new CardPile(deck);
         rechargeDeck = new RechargeDeck(deck, pile);
         rechargeDeck.start();
-
-        playerHuman = new PlayerHuman(deck, 1, lock, turnManager, pile);
-        playerGPU1 = new PlayerGPU(deck, 2, lock, turnManager, pile, this);
+        playerGPUList = new ArrayList<>();
+        playerHuman = new PlayerHuman(deck, 1, lock, turnManager, pile);//se inicializa el jugador
+        playerHuman.initializePlayer();
+        for(int i =2; i <= totalPlayersGPU+1; i++){
+            playerGPU = new PlayerGPU(deck, i, lock, turnManager, pile, this);
+            playerGPUList.add(playerGPU);
+            playerGPU.initializePlayer();
+        }
+        /*
         playerGPU2 = new PlayerGPU(deck, 3, lock, turnManager, pile, this);
         playerGPU3 = new PlayerGPU(deck, 4, lock, turnManager, pile, this);
+        playerGPUList = List.of(playerGPU, playerGPU2, playerGPU3);
+         Todos los gpui inician con isPlaying en falso y sin cartas, y todos los objtetos se ponen en la lista playerGPYList
+        * Cual es la idea? primero como notas*/
 
-        playerHuman.initializePlayer();
-        playerGPU1.initializePlayer();
-        playerGPU2.initializePlayer();
-        playerGPU3.initializePlayer();
-
-        playerGPUList = List.of(playerGPU1, playerGPU2, playerGPU3);
-
+       // playerGPU1.initializePlayer();
+       // playerGPU2.initializePlayer();
+       // playerGPU3.initializePlayer();
         printCardsHuman();
         printCardsGPU();
         updatePileImage(pile.getTopCard());
 
         // Arrancan los hilos PERO el turno aún no está activo
         playerHuman.start();
-        playerGPU1.start();
-        playerGPU2.start();
-        playerGPU3.start();
-
-        // Inicia oficialmente el turno 1
-        synchronized (lock) {
-            turnManager.startGame();
-            lock.notifyAll();
+        for(PlayerGPU playerGPU : playerGPUList){
+            playerGPU.start();
         }
+       // playerGPU1.start();
+       // playerGPU2.start();
+       // playerGPU3.start();
+
+
     }
 
     // ------------------------------------------------------------
@@ -101,17 +117,22 @@ public class GameWindowController {
 
         for (int i = 0; i < playerGPUList.size(); i++) {
             HBox box = boxes.get(i);
-            PlayerGPU player = playerGPUList.get(i);
+            PlayerGPU playerGPU = playerGPUList.get(i);
+            if(playerGPU.getIsplaying()){
 
-            for (int j = 0; j < 4; j++) {
-                ImageView iv = (ImageView) box.getChildren().get(j);
-                if (player.getIsplaying()) {
-                    iv.setImage(backImage);
-                } else {
-                    iv.setImage(null);
+                for (int j = 0; j < 4; j++) {
+                    ImageView iv = (ImageView) box.getChildren().get(j);
+                    if (playerGPU.getIsplaying()) {
+                        iv.setImage(backImage);
+                    } else {
+                        iv.setImage(null);
+                    }
                 }
             }
+
+
         }
+
     }
 
     // ------------------------------------------------------------

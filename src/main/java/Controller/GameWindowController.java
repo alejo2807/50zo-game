@@ -91,7 +91,7 @@ public class GameWindowController {
        // playerGPU1.start();
        // playerGPU2.start();
        // playerGPU3.start();
-
+        printCardsGPU();
 
     }
 

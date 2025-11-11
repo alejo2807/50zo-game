@@ -23,7 +23,10 @@ public class PlayerGPU extends AdapterPlayers {
         System.out.println("🤖 GPU " + turn + " hilo iniciado");
 
         while (isPlaying) {
+
             synchronized (lock) {
+                System.out.println(turnManager.getTotalTurns());
+                System.out.println("TUUUUURRRRNOOOO ACTUAAAAAAAAAL  "+turnManager.getActualTurn());
                 // Esperar hasta que sea mi turno
                 while (isPlaying && turnManager.getActualTurn() != turn) {
                     try {
@@ -33,25 +36,39 @@ public class PlayerGPU extends AdapterPlayers {
                         return;
                     }
                 }
-
+            /*
                 // Verificar de nuevo si sigue jugando después de despertar
                 if (!isPlaying) {
                     System.out.println("💤 GPU " + turn + " sale del juego");
-                    break;
-                }
-
-                // Verificar si tiene cartas válidas
-                if (!hasValidCards()) {
-                    System.out.println("🚫 GPU " + turn + " queda fuera del juego");
-
-                    // Devolver todas las cartas al mazo antes de salir
                     returnCardsToDecK();
 
                     // Actualizar interfaz para que desaparezcan las cartas
                     Platform.runLater(() -> controller.printCardsGPU());
 
                     turnManager.passTurn();
+                    turnManager.eliminatePlayer();
+                    turnManager.setLasTurnEliminate(turn);
+                    this.isPlaying = false;
                     lock.notifyAll();
+                    break;  // Sale del bucle y termina el hilo
+                }
+*/
+                // Verificar si tiene cartas válidas
+                if (!hasValidCards()) {
+                    System.out.println("🚫 GPU " + turn + " queda fuera del juego");
+
+
+                    // Devolver todas las cartas al mazo antes de salir
+                    returnCardsToDecK();
+
+                    // Actualizar interfaz para que desaparezcan las cartas
+                    Platform.runLater(() -> controller.printCardsGPU());
+                   // turnManager.eliminatePlayer();
+                    turnManager.setLasTurnEliminate(turn);
+                    this.isPlaying = false;
+                    turnManager.passTurn();
+                    lock.notifyAll();
+
                     break;  // Sale del bucle y termina el hilo
                 }
 
@@ -122,6 +139,7 @@ public class PlayerGPU extends AdapterPlayers {
         }
 
         System.out.println("💤 GPU " + turn + " hilo terminado");
+
     }
     public void returnCardsToDecK() {
         if (hand.isEmpty()) {
@@ -144,5 +162,8 @@ public class PlayerGPU extends AdapterPlayers {
         deck.shuffle();
 
         System.out.println("🔀 Mazo barajado. Cartas disponibles: " + deck.getDeck().size());
+    }
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
 }

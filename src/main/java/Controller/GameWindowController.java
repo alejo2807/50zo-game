@@ -38,6 +38,7 @@ public class GameWindowController {
     private PlayerHuman playerHuman;
     private PlayerGPU playerGPU1, playerGPU2, playerGPU3;
     private List<PlayerGPU> playerGPUList;
+    private int numPlayers;
 
     private boolean cardPlayed = false; // control de flujo humano
 
@@ -215,4 +216,8 @@ public class GameWindowController {
         }
     }
 
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+        System.out.println("Juego configurado para " + numPlayers + " jugadores");
+    }
 }

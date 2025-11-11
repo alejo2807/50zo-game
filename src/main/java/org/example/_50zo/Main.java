@@ -1,6 +1,7 @@
 package org.example._50zo;
 
 import View.GameWindow;
+import View.StartWindow;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -10,6 +11,6 @@ public class Main extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GameWindow.getInstance(1).show();
+        StartWindow.getInstance().show();
     }
 }

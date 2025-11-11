@@ -53,10 +53,7 @@ public class SelectionPlayersController {
             // Cerrar la ventana de selección DESDE EL BOTÓN
             playButton.getScene().getWindow().hide();
 
-            // Obtener la instancia del GameWindow y configurar jugadores
-            GameWindow gameWindow = GameWindow.getInstance();
-            gameWindow.setNumPlayers(numPlayers); // Necesitas agregar este método en GameWindow
-            gameWindow.show();
+            GameWindow.getInstance(numPlayers-1).show();
 
         } catch (IOException e) {
             System.err.println("Error al cargar la ventana del juego: " + e.getMessage());

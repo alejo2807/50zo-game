@@ -1,20 +1,26 @@
 package Model.Players;
 
-import Model.Cards.Card;
+import Controller.GameWindowController;
 import Model.Cards.CardPile;
 import Model.Cards.Deck;
+import View.GameWindow;
+import View.Messages;
+import javafx.application.Platform;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 public class PlayerHuman extends AdapterPlayers {
     private Thread thread;
     private int indexCard;
     private boolean turnFinished = false;
+    private GameWindowController controller;
+    private boolean isWin = false;
 
     public PlayerHuman(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile) {
         super(deck, myTurn, lock, turnManager, cardPile);
         takeHand();
+        controller = new GameWindowController();
+
     }
 
     public PlayerHuman(Deck deck) {
@@ -25,6 +31,9 @@ public class PlayerHuman extends AdapterPlayers {
     public void run() {
         while (isPlaying) {
             synchronized (lock) {
+
+
+
                 // Esperar turno
                 while (turnManager.getActualTurn() != turn) {
                     try {
@@ -37,15 +46,27 @@ public class PlayerHuman extends AdapterPlayers {
                 // Verificar si tiene cartas válidas
                 if (!hasValidCards()) {
                     System.out.println("🚫 Jugador Humano queda fuera del juego");
-                    turnManager.passTurn();
+                    isPlaying = false;
                     lock.notifyAll();
+                    showWinLoseMessage(2);
+
                     break;  // Sale del juego
                 }
 
                 // Esperar hasta que el jugador humano termine (juegue + tome carta)
                 turnFinished = false;
                 System.out.println("👤 Es turno del jugador humano. Esperando acción...");
-
+                if(turnManager.getActualTurn() == turn && !isWin){
+                    Platform.runLater(() -> {
+                        try {
+                            GameWindow window = GameWindow.getInstance(3);
+                            window.getScene().getRoot().setMouseTransparent(true);
+                            new Messages(3).show();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                }
                 while (!turnFinished && turnManager.getActualTurn() == turn) {
                     try {
                         lock.wait();
@@ -56,6 +77,12 @@ public class PlayerHuman extends AdapterPlayers {
 
                 // El turno ya fue pasado por el controlador, solo notificamos
                 System.out.println("👤 Jugador humano terminó su turno.");
+                if(turnManager.getTotalTurns().size() == 1 && isPlaying){
+                    // isWin = true;
+                showWinLoseMessage(1);
+
+                }
+
             }
         }
     }
@@ -73,5 +100,27 @@ public class PlayerHuman extends AdapterPlayers {
 
     public void setIndexCard(int indexCard) {
         this.indexCard = indexCard;
+    }
+    private void showWinLoseMessage(int i) {
+        // isWin = true;
+        Platform.runLater(() -> {
+            try {
+                GameWindow.getInstance(3).close();
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(300); // espera 0.3 segundos
+                        Platform.runLater(() -> {
+                            try {
+                                new Messages(i).show();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+                    } catch (InterruptedException ignored) {}
+                }).start();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

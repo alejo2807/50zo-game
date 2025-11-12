@@ -137,7 +137,7 @@ public class PlayerGPU extends AdapterPlayers {
                 lock.notifyAll();
             }
         }
-
+        Platform.runLater(() -> controller.printCardsGPU());
         System.out.println("💤 GPU " + turn + " hilo terminado");
 
     }

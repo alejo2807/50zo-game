@@ -56,7 +56,23 @@ public class TurnManager {
     public synchronized void setLasTurnEliminate(int lasTurnEliminate) {
         for(int i = 0; i < this.totalTurns.size(); i++){
             if(this.totalTurns.get(i) == lasTurnEliminate){
+
+                // Si eliminamos un turno ANTES del iterator actual, ajustamos
+                if(i < iterator){
+                    iterator--;
+                }
+
+                // Si eliminamos el turno actual, retrocedemos el iterator
+                else if(i == iterator){
+                    iterator--;
+                }
+
                 totalTurns.remove(i);
+                System.out.println("🚫 Jugador " + lasTurnEliminate + " eliminado. Turnos restantes: " + totalTurns);
+                break; // Importante: salir después de eliminar
+
+
+                //totalTurns.remove(i);
             }
         }
     }

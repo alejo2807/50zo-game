@@ -67,6 +67,7 @@ public class PlayerGPU extends AdapterPlayers {
                     turnManager.setLasTurnEliminate(turn);
                     this.isPlaying = false;
                     turnManager.passTurn();
+                    controller.notifyBotTurnChange();
                     lock.notifyAll();
 
                     break;  // Sale del bucle y termina el hilo
@@ -76,7 +77,7 @@ public class PlayerGPU extends AdapterPlayers {
 
                 try {
                     // Simula "pensar"
-                    Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 2500));
+                    Thread.sleep(ThreadLocalRandom.current().nextInt(2000, 4001));
                 } catch (InterruptedException e) {
                     System.err.println("❌ GPU " + turn + " interrumpida pensando");
                     return;
@@ -113,7 +114,7 @@ public class PlayerGPU extends AdapterPlayers {
 
                 try {
                     // Pequeña pausa antes de tomar nueva carta
-                    Thread.sleep(ThreadLocalRandom.current().nextInt(500, 1000));
+                    Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 2000));
                 } catch (InterruptedException e) {
                     System.err.println("❌ GPU " + turn + " interrumpida antes de tomar carta");
                     return;
@@ -134,6 +135,8 @@ public class PlayerGPU extends AdapterPlayers {
                 // Pasar turno
                 System.out.println("🤖 GPU " + turn + " termina su turno");
                 turnManager.passTurn();
+                controller.notifyBotTurnChange();
+
                 lock.notifyAll();
             }
         }

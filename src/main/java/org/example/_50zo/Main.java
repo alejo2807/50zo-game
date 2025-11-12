@@ -12,6 +12,7 @@ public class Main extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
-        StartWindow.getInstance().show();
+       StartWindow.getInstance().show();
+
     }
 }

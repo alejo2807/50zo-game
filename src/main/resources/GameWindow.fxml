@@ -48,7 +48,7 @@
             </ImageView>
          </children>
       </HBox>
-      <HBox fx:id="cardsGPU2" layoutX="101.0" layoutY="528.0" prefHeight="141.0" prefWidth="498.0">
+      <HBox fx:id="cardsGPU2" layoutX="66.0" layoutY="528.0" prefHeight="141.0" prefWidth="498.0">
          <children>
             <ImageView fx:id="card41" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="card31" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
@@ -61,7 +61,7 @@
             <ImageView fx:id="card411" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="card311" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="card211" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card111" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" />
+            <ImageView fx:id="card111" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" preserveRatio="true" />
          </children>
       </HBox>
       <Button fx:id="takeCard" layoutX="674.0" layoutY="556.0" mnemonicParsing="false" onAction="#takeCard" prefHeight="87.0" prefWidth="78.0" />
@@ -69,7 +69,7 @@
          <image>
             <Image url="@deck/back_red.png" />
          </image></ImageView>
-      <Label fx:id="valuePile" alignment="CENTER" layoutX="903.0" layoutY="310.0" prefHeight="38.0" prefWidth="98.0" text="Label" textFill="WHITE">
+      <Label fx:id="valuePile" alignment="CENTER" layoutX="866.0" layoutY="310.0" prefHeight="38.0" prefWidth="98.0" text="Label" textFill="WHITE">
          <font>
             <Font size="27.0" />
          </font></Label>
@@ -78,22 +78,22 @@
             <Image url="@initialScreen1.png" />
          </image>
       </ImageView>
-      <Label layoutX="101.0" layoutY="55.0" prefHeight="53.0" prefWidth="89.0" text="Bot 1" textFill="WHITE">
+      <Label fx:id="labelBot1" layoutX="101.0" layoutY="55.0" prefHeight="53.0" prefWidth="89.0" text="Bot 1" textFill="WHITE">
          <font>
             <Font size="34.0" />
          </font>
       </Label>
-      <Label layoutX="1124.0" layoutY="55.0" prefHeight="53.0" prefWidth="98.0" text="Bot 3" textFill="WHITE">
+      <Label fx:id="labelBot3" layoutX="1124.0" layoutY="55.0" prefHeight="53.0" prefWidth="98.0" text="Bot 3" textFill="WHITE">
          <font>
             <Font size="34.0" />
          </font>
       </Label>
-      <Label layoutX="1119.0" layoutY="465.0" prefHeight="53.0" prefWidth="108.0" text="Player" textFill="WHITE">
+      <Label fx:id="labelPlayer" layoutX="1119.0" layoutY="465.0" prefHeight="53.0" prefWidth="108.0" text="Player" textFill="WHITE">
          <font>
             <Font size="34.0" />
          </font>
       </Label>
-      <Label layoutX="101.0" layoutY="475.0" prefHeight="53.0" prefWidth="98.0" text="Bot 2" textFill="WHITE">
+      <Label fx:id="labelBot2" layoutX="101.0" layoutY="475.0" prefHeight="53.0" prefWidth="98.0" text="Bot 2" textFill="WHITE">
          <font>
             <Font size="34.0" />
          </font>
@@ -103,7 +103,7 @@
             <Font size="34.0" />
          </font>
       </Label>
-      <Label layoutX="795.0" layoutY="360.0" prefHeight="53.0" prefWidth="284.0" text="Turn of " textFill="WHITE">
+      <Label fx:id="turnLabel" layoutX="795.0" layoutY="360.0" prefHeight="53.0" prefWidth="284.0" text="Turn of player" textFill="WHITE">
          <font>
             <Font size="34.0" />
          </font>

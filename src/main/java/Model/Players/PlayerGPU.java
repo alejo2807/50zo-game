@@ -77,7 +77,7 @@ public class PlayerGPU extends AdapterPlayers {
 
                 try {
                     // Simula "pensar"
-                    Thread.sleep(ThreadLocalRandom.current().nextInt(100, 1001));
+                    Thread.sleep(ThreadLocalRandom.current().nextInt(2000, 4001));
                 } catch (InterruptedException e) {
                     System.err.println("❌ GPU " + turn + " interrumpida pensando");
                     return;
@@ -114,7 +114,7 @@ public class PlayerGPU extends AdapterPlayers {
 
                 try {
                     // Pequeña pausa antes de tomar nueva carta
-                    Thread.sleep(ThreadLocalRandom.current().nextInt(500, 1000));
+                    Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 2000));
                 } catch (InterruptedException e) {
                     System.err.println("❌ GPU " + turn + " interrumpida antes de tomar carta");
                     return;

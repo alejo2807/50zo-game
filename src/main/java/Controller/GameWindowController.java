@@ -34,6 +34,9 @@ public class GameWindowController {
     @FXML
     private StackPane deckStack;
 
+    @FXML private Label labelPlayer, labelBot1, labelBot2, labelBot3;
+    @FXML private Label turnLabel;
+
     private RechargeDeck rechargeDeck;
     private Deck deck;
     private TurnManager turnManager;
@@ -44,6 +47,7 @@ public class GameWindowController {
     private List<PlayerGPU> playerGPUList;
     private int totalPlayersGPU ;
     private boolean cardPlayed = false; // control de flujo humano
+
    /* public GameWindowController(int totalPlayersGPU) {
         this.totalPlayersGPU = totalPlayersGPU;
     }*/
@@ -85,6 +89,12 @@ public class GameWindowController {
         printCardsHuman();
         printCardsGPU();
         updatePileImage(pile.getTopCard());
+
+        //Here we are changing in a dynamic way the labels of the players
+        configureLabelVisibility();
+        updateTurnLabel();
+
+
 
         // Arrancan los hilos PERO el turno aún no está activo
         playerHuman.start();
@@ -145,6 +155,9 @@ public class GameWindowController {
                 box.getChildren().clear(); // elimina todos los hijos de una vez
             }
         }
+        //this line will update the labels dynamically
+        configureLabelVisibility();
+
     }
 
 
@@ -230,6 +243,7 @@ public class GameWindowController {
             lock.notifyAll();           // Despertar todos los hilos
         }
 
+        updateTurnLabel();
         System.out.println("🔄 Turno pasado a jugador " + turnManager.getActualTurn());
     }
 
@@ -248,5 +262,44 @@ public class GameWindowController {
             deckStack.getChildren().remove(deckStack.getChildren().size() - 1);
         }
     }
-    
+
+
+    private void configureLabelVisibility() {
+        // Player siempre visible
+        if (labelPlayer != null) {
+            labelPlayer.setVisible(true);
+        }
+
+        // Lista de labels de bots
+        List<Label> botLabels = List.of(labelBot1, labelBot2, labelBot3);
+
+        // Configurar visibilidad según playerGPUList
+        for (int i = 0; i < botLabels.size(); i++) {
+            if (i < playerGPUList.size() && playerGPUList.get(i).getIsplaying()) {
+                botLabels.get(i).setVisible(true);
+            } else {
+                botLabels.get(i).setVisible(false);
+            }
+        }
+    }
+
+
+    private void updateTurnLabel() {
+        int currentTurn = turnManager.getActualTurn();
+
+        if (currentTurn == playerHuman.getTurn()) {
+            turnLabel.setText("Turno de: Player");
+        } else {
+            // Es turno de un bot (turno 2, 3, o 4 = Bot 1, 2, o 3)
+            int botNumber = currentTurn - 1; // Turno 2 = Bot 1, Turno 3 = Bot 2, etc.
+            turnLabel.setText("Turno de: Bot " + botNumber);
+        }
+    }
+
+    public void notifyBotTurnChange() {
+        javafx.application.Platform.runLater(() -> {
+            updateTurnLabel();
+            printCardsGPU(); // Actualizar cartas también
+        });
+    }
 }

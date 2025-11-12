@@ -67,6 +67,7 @@ public class PlayerGPU extends AdapterPlayers {
                     turnManager.setLasTurnEliminate(turn);
                     this.isPlaying = false;
                     turnManager.passTurn();
+                    controller.notifyBotTurnChange();
                     lock.notifyAll();
 
                     break;  // Sale del bucle y termina el hilo
@@ -134,6 +135,8 @@ public class PlayerGPU extends AdapterPlayers {
                 // Pasar turno
                 System.out.println("🤖 GPU " + turn + " termina su turno");
                 turnManager.passTurn();
+                controller.notifyBotTurnChange();
+
                 lock.notifyAll();
             }
         }

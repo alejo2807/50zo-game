@@ -248,8 +248,5 @@ public class GameWindowController {
             deckStack.getChildren().remove(deckStack.getChildren().size() - 1);
         }
     }
-
-
-
-
+    
 }

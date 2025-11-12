@@ -6,73 +6,107 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="953.0" prefWidth="1369.0" stylesheets="@game-style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" >
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="888.0" prefWidth="1300.0" stylesheets="@game-style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="964.0" fitWidth="1528.0" layoutX="-75.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="900.0" fitWidth="1380.0" layoutX="-59.0" layoutY="-8.0" pickOnBounds="true">
          <image>
             <Image url="@backgroundImages/GameScreen.png" />
          </image>
       </ImageView>
-      <HBox fx:id="cardsGPU1" layoutX="83.0" layoutY="59.0" prefHeight="193.0" prefWidth="498.0">
+      <HBox fx:id="cardsGPU1" layoutX="101.0" layoutY="114.0" prefHeight="142.0" prefWidth="426.0">
          <children>
-            <ImageView fx:id="card4" fitHeight="185.0" fitWidth="121.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card3" fitHeight="184.0" fitWidth="121.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card2" fitHeight="185.0" fitWidth="121.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card1" fitHeight="176.0" fitWidth="135.0" />
+            <ImageView fx:id="card4" fitHeight="142.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card3" fitHeight="142.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card2" fitHeight="142.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card1" fitHeight="142.0" fitWidth="100.0" />
          </children>
       </HBox>
 
-       <HBox fx:id="playerCards" layoutX="761.0" layoutY="690.0" prefHeight="177.0" prefWidth="488.0">
+       <HBox fx:id="playerCards" layoutX="767.0" layoutY="528.0" prefHeight="142.0" prefWidth="466.0">
          <children>
-            <ImageView fitHeight="176.0" fitWidth="154.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@deck/back_red.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="176.0" fitWidth="132.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@deck/back_red.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="177.0" fitWidth="129.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@deck/back_red.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="177.0" fitWidth="130.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@deck/back_red.png" />
                </image>
             </ImageView>
          </children>
       </HBox>
-      <HBox fx:id="cardsGPU2" layoutX="83.0" layoutY="686.0" prefHeight="141.0" prefWidth="498.0">
+      <HBox fx:id="cardsGPU2" layoutX="101.0" layoutY="528.0" prefHeight="141.0" prefWidth="498.0">
          <children>
-            <ImageView fx:id="card41" fitHeight="185.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card31" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card21" fitHeight="185.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card11" fitHeight="176.0" fitWidth="135.0" onMouseClicked="#handleCardClick" />
+            <ImageView fx:id="card41" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card31" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card21" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card11" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" />
          </children>
       </HBox>
-      <HBox fx:id="cardsGPU3" layoutX="757.0" layoutY="63.0" prefHeight="177.0" prefWidth="488.0">
+      <HBox fx:id="cardsGPU3" layoutX="764.0" layoutY="114.0" prefHeight="142.0" prefWidth="438.0">
          <children>
-            <ImageView fx:id="card411" fitHeight="185.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card311" fitHeight="184.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card211" fitHeight="185.0" fitWidth="121.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="card111" fitHeight="176.0" fitWidth="135.0" onMouseClicked="#handleCardClick" />
+            <ImageView fx:id="card411" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card311" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card211" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="card111" fitHeight="142.0" fitWidth="100.0" onMouseClicked="#handleCardClick" />
          </children>
       </HBox>
-      <Button fx:id="takeCard" layoutX="989.0" layoutY="599.0" mnemonicParsing="false" onAction="#takeCard" prefHeight="87.0" prefWidth="78.0" />
-      <ImageView fx:id="cardPile" fitHeight="176.0" fitWidth="135.0" layoutX="623.0" layoutY="361.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="takeCard" layoutX="674.0" layoutY="556.0" mnemonicParsing="false" onAction="#takeCard" prefHeight="87.0" prefWidth="78.0" />
+      <ImageView fx:id="cardPile" fitHeight="159.0" fitWidth="108.0" layoutX="659.0" layoutY="308.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@deck/back_red.png" />
          </image></ImageView>
-      <Label fx:id="valuePile" alignment="CENTER" layoutX="657.0" layoutY="554.0" prefHeight="27.0" prefWidth="55.0" text="Label" textFill="WHITE" />
-      <ImageView fitHeight="176.0" fitWidth="320.0" layoutX="177.0" layoutY="366.0" pickOnBounds="true" preserveRatio="true">
+      <Label fx:id="valuePile" alignment="CENTER" layoutX="903.0" layoutY="310.0" prefHeight="38.0" prefWidth="98.0" text="Label" textFill="WHITE">
+         <font>
+            <Font size="27.0" />
+         </font></Label>
+      <ImageView fitHeight="152.0" fitWidth="265.0" layoutX="364.0" layoutY="308.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@initialScreen1.png" />
          </image>
       </ImageView>
+      <Label layoutX="101.0" layoutY="55.0" prefHeight="53.0" prefWidth="89.0" text="Bot 1" textFill="WHITE">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+      <Label layoutX="1124.0" layoutY="55.0" prefHeight="53.0" prefWidth="98.0" text="Bot 3" textFill="WHITE">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+      <Label layoutX="1119.0" layoutY="465.0" prefHeight="53.0" prefWidth="108.0" text="Player" textFill="WHITE">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+      <Label layoutX="101.0" layoutY="475.0" prefHeight="53.0" prefWidth="98.0" text="Bot 2" textFill="WHITE">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+      <Label layoutX="795.0" layoutY="302.0" prefHeight="53.0" prefWidth="108.0" text="Sum:" textFill="WHITE">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+      <Label layoutX="795.0" layoutY="360.0" prefHeight="53.0" prefWidth="284.0" text="Turn of " textFill="WHITE">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

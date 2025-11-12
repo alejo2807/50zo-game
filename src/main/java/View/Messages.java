@@ -10,7 +10,9 @@ import java.io.IOException;
 public class Messages extends Stage {
     private String title;
     private FinalMessageController controller;
+    private int option;
     public Messages(int option) throws IOException {
+        this.option = option;
         FXMLLoader fxmlLoader = new FXMLLoader();
         switch (option) {
             case 1 -> {
@@ -37,5 +39,6 @@ public class Messages extends Stage {
         setResizable(false);
         initStyle(javafx.stage.StageStyle.UNDECORATED);
     }
+    public int getOption() {return option;}
 }
 

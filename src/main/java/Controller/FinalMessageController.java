@@ -22,12 +22,24 @@ public class FinalMessageController {
         window.getScene().getRoot().setMouseTransparent(true);
     }
     @FXML
-    void closeWindow() throws IOException {
+    void closeWindow()  throws IOException{
+        if(messages.getOption() == 3){
+            turnMessage();
+        }
+        else{
+            closeMessage();
+        }
+    }
+
+    void turnMessage() throws IOException {
         setTrue();
         GameWindow window = GameWindow.getInstance(3);
         window.getScene().getRoot().setMouseTransparent(false);
         messages.close();
-
     }
 
+    void closeMessage() throws IOException {
+        GameWindow.getInstance(3).close();
+        messages.close();
+    }
 }

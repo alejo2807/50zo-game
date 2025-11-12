@@ -15,7 +15,7 @@ public class PlayerHuman extends AdapterPlayers {
     private boolean turnFinished = false;
     private GameWindowController controller;
     private boolean isWin = false;
-
+    private Messages messages;
     public PlayerHuman(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile) {
         super(deck, myTurn, lock, turnManager, cardPile);
         takeHand();
@@ -45,10 +45,25 @@ public class PlayerHuman extends AdapterPlayers {
 
                 // Verificar si tiene cartas válidas
                 if (!hasValidCards()) {
+                    Platform.runLater(() -> {
+                           // GameWindow.getInstance(3).close();
+                            new Thread(() -> {
+                                try {
+                                    Thread.sleep(300); // espera 0.3 segundos
+                                    Platform.runLater(() -> {
+                                        try {
+                                            new Messages(2).show();
+                                        } catch (IOException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    });
+                                } catch (InterruptedException ignored) {}
+                            }).start();
+                    });
                     System.out.println("🚫 Jugador Humano queda fuera del juego");
                     isPlaying = false;
                     lock.notifyAll();
-                    showWinLoseMessage(2);
+
 
                     break;  // Sale del juego
                 }
@@ -61,7 +76,8 @@ public class PlayerHuman extends AdapterPlayers {
                         try {
                             GameWindow window = GameWindow.getInstance(3);
                             window.getScene().getRoot().setMouseTransparent(true);
-                            new Messages(3).show();
+                             messages = new Messages(3);
+                             messages.show();
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -79,7 +95,22 @@ public class PlayerHuman extends AdapterPlayers {
                 System.out.println("👤 Jugador humano terminó su turno.");
                 if(turnManager.getTotalTurns().size() == 1 && isPlaying){
                     // isWin = true;
-                showWinLoseMessage(1);
+                    Platform.runLater(() -> {
+                            new Thread(() -> {
+                                try {
+                                    Thread.sleep(300); // espera 0.3 segundos
+                                    Platform.runLater(() -> {
+                                        try {
+                                            messages.close();
+                                            new Messages(1).show();
+                                        } catch (IOException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    });
+                                } catch (InterruptedException ignored) {}
+                            }).start();
+
+                    });
 
                 }
 

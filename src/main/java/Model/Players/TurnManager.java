@@ -48,10 +48,6 @@ public class TurnManager {
         actualTurn = 1;
         System.out.println("🎮 TurnManager.startGame(): Juego iniciado, turno = " + actualTurn);
     }
-    public void eliminatePlayer() {
-        this.playersEliminate++;
-        this.totalPlayers--;
-    }
 
     public synchronized void setLasTurnEliminate(int lasTurnEliminate) {
         for(int i = 0; i < this.totalTurns.size(); i++){
@@ -76,9 +72,7 @@ public class TurnManager {
             }
         }
     }
-    public int getPlayersEliminate() {
-        return this.playersEliminate;
-    }
+
     public ArrayList<Integer> getTotalTurns() {
         return totalTurns;
     }

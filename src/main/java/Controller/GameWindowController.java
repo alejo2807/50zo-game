@@ -8,6 +8,8 @@ import Model.Exceptions.InvalidCardException;
 import Model.Players.PlayerGPU;
 import Model.Players.PlayerHuman;
 import Model.Players.TurnManager;
+import View.GameWindow;
+import View.Messages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -17,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +51,7 @@ public class GameWindowController {
         this.totalPlayersGPU = totalPlayersGPU;
     }
     @FXML
-    public void initialize() {
+    public void initialize() throws  IOException {
         deck = new Deck();
         turnManager = new TurnManager(totalPlayersGPU+1);//porque mas 1? porque el turnmanager tiene en cuenta el turno del jugador, osea, si son 2 gpu es 1 jugador, entonces son 3 turnos
 
@@ -91,8 +94,8 @@ public class GameWindowController {
        // playerGPU1.start();
        // playerGPU2.start();
        // playerGPU3.start();
-
-
+        printCardsGPU();
+       // popFinalMessage();
     }
 
     // ------------------------------------------------------------
@@ -118,22 +121,32 @@ public class GameWindowController {
         for (int i = 0; i < playerGPUList.size(); i++) {
             HBox box = boxes.get(i);
             PlayerGPU playerGPU = playerGPUList.get(i);
-            if(playerGPU.getIsplaying()){
 
-                for (int j = 0; j < 4; j++) {
-                    ImageView iv = (ImageView) box.getChildren().get(j);
-                    if (playerGPU.getIsplaying()) {
+            // Si el jugador está jugando
+            if (playerGPU.getIsplaying()) {
+                // Aseguramos que el HBox tenga 4 ImageViews
+                if (box.getChildren().isEmpty()) {
+                    for (int k = 0; k < 4; k++) {
+                        ImageView iv = new ImageView(backImage);
+                        iv.setFitWidth(60);
+                        iv.setFitHeight(90);
+                        box.getChildren().add(iv);
+                    }
+                } else {
+                    // Si ya tiene hijos, simplemente actualizamos las imágenes
+                    for (int j = 0; j < box.getChildren().size(); j++) {
+                        ImageView iv = (ImageView) box.getChildren().get(j);
                         iv.setImage(backImage);
-                    } else {
-                        iv.setImage(null);
                     }
                 }
             }
-
-
+            // Si no está jugando
+            else {
+                box.getChildren().clear(); // elimina todos los hijos de una vez
+            }
         }
-
     }
+
 
     // ------------------------------------------------------------
     // Evento de clic en carta del jugador humano
@@ -235,5 +248,8 @@ public class GameWindowController {
             deckStack.getChildren().remove(deckStack.getChildren().size() - 1);
         }
     }
+
+
+
 
 }

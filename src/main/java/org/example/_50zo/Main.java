@@ -1,6 +1,7 @@
 package org.example._50zo;
 
 import View.GameWindow;
+import View.Messages;
 import View.StartWindow;
 import javafx.application.Application;
 import javafx.stage.Stage;

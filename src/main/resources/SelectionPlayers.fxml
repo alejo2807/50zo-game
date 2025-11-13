@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
@@ -9,19 +10,19 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SelectionPlayersController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SelectionPlayersController">
    <children>
       <ImageView fitHeight="810.0" fitWidth="1380.0" layoutX="-46.0" layoutY="-5.0" pickOnBounds="true">
          <image>
             <Image url="@backgroundImages/GameScreen.png" />
          </image>
       </ImageView>
-      <Label layoutX="211.0" layoutY="120.0" text="How many players are going to play?" textFill="WHITE">
+      <Label layoutX="117.0" layoutY="136.0" text="How many players GPU do you want to play?" textFill="#fcfbf2">
          <font>
             <Font size="52.0" />
          </font>
       </Label>
-      <RadioButton fx:id="twoPlayersButton" layoutX="211.0" layoutY="315.0" mnemonicParsing="false" prefHeight="99.0" prefWidth="257.0" text="2 players" textFill="WHITE">
+      <RadioButton fx:id="twoPlayersButton" layoutX="211.0" layoutY="315.0" mnemonicParsing="false" prefHeight="99.0" prefWidth="257.0" text="1 GPU" textFill="WHITE">
          <font>
             <Font size="39.0" />
          </font>
@@ -29,16 +30,20 @@
             <ToggleGroup fx:id="selectionPlayers" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton fx:id="threePlayersButton" layoutX="536.0" layoutY="323.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="250.0" text="3 players" textFill="WHITE" toggleGroup="$selectionPlayers">
+      <RadioButton fx:id="threePlayersButton" layoutX="536.0" layoutY="323.0" mnemonicParsing="false" prefHeight="83.0" prefWidth="250.0" text="2 GPU's" textFill="WHITE" toggleGroup="$selectionPlayers">
          <font>
             <Font size="39.0" />
          </font>
       </RadioButton>
-      <RadioButton fx:id="fourPlayersButton" layoutX="861.0" layoutY="327.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="250.0" text="4 players" textFill="WHITE" toggleGroup="$selectionPlayers">
+      <RadioButton fx:id="fourPlayersButton" layoutX="861.0" layoutY="327.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="250.0" text="3 GPU's" textFill="WHITE" toggleGroup="$selectionPlayers">
          <font>
             <Font size="39.0" />
          </font>
       </RadioButton>
-      <Button fx:id="playButton" layoutX="538.0" layoutY="507.0" mnemonicParsing="false" onAction="#onPlayClick" prefHeight="91.0" prefWidth="206.0" styleClass="play-button" stylesheets="@styles.css" text="Play" />
+      <Button fx:id="playButton" layoutX="544.0" layoutY="505.0" mnemonicParsing="false" onAction="#onPlayClick" prefHeight="91.0" prefWidth="235.0" styleClass="play-button" text="Play">
+         <stylesheets>
+            <URL value="@game-style.css" />
+            <URL value="@styles.css" />
+         </stylesheets></Button>
    </children>
 </Pane>

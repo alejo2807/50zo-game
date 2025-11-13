@@ -1,5 +1,6 @@
 package Controller;
 
+import View.RulesWindow;
 import View.SelectionPlayers;
 import View.StartWindow;
 import javafx.application.Platform;
@@ -38,6 +39,12 @@ public class StartWindowController {
             System.err.println("Error al cargar la selección de jugadores: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+    @FXML Button rulesButton;
+    @FXML
+    void rules() throws IOException {
+        RulesWindow.getInstance().show();
+        StartWindow.getInstance().close();
     }
 
 }

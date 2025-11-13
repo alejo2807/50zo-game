@@ -10,8 +10,10 @@ import Model.Players.PlayerHuman;
 import Model.Players.TurnManager;
 import View.GameWindow;
 import View.Messages;
+import View.SelectionPlayers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -288,11 +290,11 @@ public class GameWindowController {
         int currentTurn = turnManager.getActualTurn();
 
         if (currentTurn == playerHuman.getTurn()) {
-            turnLabel.setText("Turno de: Player");
+            turnLabel.setText("Your turn :)");
         } else {
             // Es turno de un bot (turno 2, 3, o 4 = Bot 1, 2, o 3)
             int botNumber = currentTurn - 1; // Turno 2 = Bot 1, Turno 3 = Bot 2, etc.
-            turnLabel.setText("Turno de: Bot " + botNumber);
+            turnLabel.setText("Turn of Bot " + botNumber);
         }
     }
 
@@ -301,5 +303,16 @@ public class GameWindowController {
             updateTurnLabel();
             printCardsGPU(); // Actualizar cartas también
         });
+    }
+    @FXML
+    Button backButton, closeButton;
+    @FXML
+    void back() throws IOException{
+        GameWindow.destroyInstance();
+        SelectionPlayers.getInstance().show();
+    }
+    @FXML
+    void close() throws IOException {
+        GameWindow.destroyInstance();
     }
 }

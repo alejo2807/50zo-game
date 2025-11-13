@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-image: url(backgroundImages/GameScreen.png); -fx-background-size: cover; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.RulesController">
+    <children>
+      <ImageView fitHeight="838.0" fitWidth="1171.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@backgroundImages/GameScreen.png" />
+         </image>
+      </ImageView>
+        <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="748.0" prefWidth="1004.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <children>
+                <Label alignment="CENTER" style="-fx-text-fill: #ffeb3b; -fx-font-weight: bold; -fx-font-size: 36px; -fx-padding: 10; -fx-background-color: transparent;" text="🎰 Reglas de 50zo" textAlignment="CENTER">
+                    <font>
+                        <Font name="Impact" size="36.0" />
+                    </font>
+                </Label>
+
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox alignment="TOP_LEFT" style="-fx-background-color: rgba(38, 50, 56, 0.9); -fx-padding: 20; -fx-background-radius: 10;">
+
+                            <Label style="-fx-text-fill: #E0F7FA; -fx-font-weight: bold; -fx-font-size: 20px; -fx-padding: 10 0 5 0;" text="1. Regla Principal (El 50) 🛑" />
+                            <TextFlow style="-fx-line-spacing: 1.5;">
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text="La suma acumulada de la mesa " />
+                                <Text fill="#ffeb3b" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="NO DEBE EXCEDER EL 50 " />
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text="(debe ser menor o igual a 50). El objetivo es ser el último jugador en quedar en juego." />
+                            </TextFlow>
+
+                            <Label style="-fx-text-fill: #E0F7FA; -fx-font-weight: bold; -fx-font-size: 20px; -fx-padding: 15 0 5 0;" text="2. Preparación de la Mesa 🃏" />
+                            <TextFlow style="-fx-line-spacing: 1.5;">
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text="A cada jugador se le reparten " />
+                                <Text fill="#4CAF50" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="4 cartas aleatorias" />
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text=". Una carta aleatoria inicial se coloca boca arriba en la mesa para comenzar la suma. El jugador humano comienza a jugar." />
+                            </TextFlow>
+
+                            <Label style="-fx-text-fill: #E0F7FA; -fx-font-weight: bold; -fx-font-size: 20px; -fx-padding: 15 0 5 0;" text="3. Turno de Juego y Descarte ➡️" />
+                            <TextFlow style="-fx-line-spacing: 1.5;">
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text="En su turno, el jugador debe seleccionar una carta de su mano que, al sumarse/restarse a la pila, no exceda 50. Luego, el mismo jugador debe " />
+                                <Text fill="#4CAF50" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="tomar una carta del mazo " />
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text="para mantener siempre 4 cartas en su mano." />
+                            </TextFlow>
+
+                            <Label style="-fx-text-fill: #E0F7FA; -fx-font-weight: bold; -fx-font-size: 20px; -fx-padding: 15 0 5 0;" text="4. Valores de las Cartas 🔢" />
+                            <VBox style="-fx-padding: 0 0 0 20;">
+                                <TextFlow style="-fx-line-spacing: 1.5;">
+                                    <Text fill="WHITE" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="• Cartas Numéricas (2 al 8, 10): " />
+                                    <Text fill="WHITE" style="-fx-size: 16px;" text="Suman su valor numérico." />
+                                </TextFlow>
+                                <TextFlow style="-fx-line-spacing: 1.5;">
+                                    <Text fill="WHITE" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="• Carta 9: " />
+                                    <Text fill="WHITE" style="-fx-size: 16px;" text="No suma ni resta (valor 0)." />
+                                </TextFlow>
+                                <TextFlow style="-fx-line-spacing: 1.5;">
+                                    <Text fill="WHITE" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="• Cartas Figuras (J, Q, K): " />
+                                    <Text fill="#e57373" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Restan 10." />
+                                </TextFlow>
+                                <TextFlow style="-fx-line-spacing: 1.5;">
+                                    <Text fill="WHITE" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="• As (A): " />
+                                    <Text fill="#ffeb3b" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Suma 1 o 10, según convenga " />
+                                    <Text fill="WHITE" style="-fx-size: 16px;" text="para evitar exceder 50." />
+                                </TextFlow>
+                            </VBox>
+
+                            <Label style="-fx-text-fill: #E0F7FA; -fx-font-weight: bold; -fx-font-size: 20px; -fx-padding: 15 0 5 0;" text="5. Eliminación y Fin 💀" />
+                            <TextFlow style="-fx-line-spacing: 1.5;">
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text="Si un jugador " />
+                                <Text fill="#e57373" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="no puede jugar ninguna carta " />
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text="de su mano sin exceder 50, queda " />
+                                <Text fill="#e57373" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="ELIMINADO" />
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text=". Sus cartas se envían al final del mazo. El juego termina cuando solo queda un jugador." />
+                            </TextFlow>
+
+                            <Label style="-fx-text-fill: #E0F7FA; -fx-font-weight: bold; -fx-font-size: 20px; -fx-padding: 15 0 5 0;" text="6. Recarga del Mazo 🔄" />
+                            <TextFlow style="-fx-line-spacing: 1.5;">
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text="Si el mazo se termina, todas las cartas de la mesa, " />
+                                <Text fill="#ffeb3b" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="excepto la última jugada" />
+                                <Text fill="WHITE" style="-fx-font-size: 16px;" text=", se barajan y se convierten en el nuevo mazo. La suma de la mesa se mantiene sin cambios." />
+                            </TextFlow>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToSelection" style="-fx-background-color: #e57373; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px; -fx-padding: 10 30;" text="Back to the menu" VBox.vgrow="NEVER">
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="20.0" />
+                    </VBox.margin>
+                </Button>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

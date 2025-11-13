@@ -10,8 +10,10 @@ import Model.Players.PlayerHuman;
 import Model.Players.TurnManager;
 import View.GameWindow;
 import View.Messages;
+import View.SelectionPlayers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -446,5 +448,16 @@ public class GameWindowController {
             updateTurnLabel();
             printCardsGPU(); // Also update cards
         });
+    }
+    @FXML
+    Button backButton, closeButton;
+    @FXML
+    void back() throws IOException{
+        GameWindow.destroyInstance();
+        SelectionPlayers.getInstance().show();
+    }
+    @FXML
+    void close() throws IOException {
+        GameWindow.destroyInstance();
     }
 }

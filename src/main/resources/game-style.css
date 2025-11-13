@@ -83,3 +83,17 @@
     -fx-spacing: 15px; /* separa las cartas dentro del HBox */
     -fx-alignment: center;
 }
+
+.backButton {
+    -fx-background-image: url("arrow.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 50 50;
+}
+
+.closeButton {
+    -fx-background-image: url("close.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 50 50;
+}

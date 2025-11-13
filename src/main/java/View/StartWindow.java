@@ -6,19 +6,36 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-import javafx.stage.Stage;
-
 /**
- * Represents the main menu window of the 'Cincuentazo' application.
+ * The {@code StartWindow} class represents the main menu window
+ * of the <b>Cincuentazo</b> application.
  * <p>
- * This class extends {@link Stage} and manages the main menu interface defined in
- * the {@code MainMenu.fxml} file. It uses the Singleton design pattern to ensure
- * only one instance of the main menu exists throughout the application's lifecycle.
+ * This class extends {@link Stage} and manages the application's main menu
+ * interface defined in the {@code MainMenu.fxml} file. It follows the
+ * <b>Singleton design pattern</b> to ensure that only one instance of the
+ * main menu window exists during the application's lifecycle.
  * </p>
+ *
+ * <p><b>Usage example:</b></p>
+ * <pre>{@code
+ * StartWindow mainMenu = StartWindow.getInstance();
+ * mainMenu.show();
+ * }</pre>
+ *
+ * @author Juan-David-Brandon
+ * @since 2025
  */
-
 public class StartWindow extends Stage {
 
+    /**
+     * Private constructor that initializes the main menu window.
+     * <p>
+     * Loads the FXML layout, sets the title, and configures the window
+     * to be non-resizable.
+     * </p>
+     *
+     * @throws IOException if the {@code MainMenu.fxml} file cannot be loaded
+     */
     private StartWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/MainMenu.fxml")
@@ -31,9 +48,9 @@ public class StartWindow extends Stage {
     }
 
     /**
-     * Static inner class implementing the Singleton holder pattern.
+     * Static inner class implementing the Singleton Holder pattern.
      * <p>
-     * Ensures lazy and thread-safe initialization of the {@link StartWindow} instance
+     * Ensures thread-safe, lazy initialization of the {@link StartWindow} instance
      * without requiring explicit synchronization.
      * </p>
      */
@@ -45,7 +62,7 @@ public class StartWindow extends Stage {
     /**
      * Returns the single instance of {@link StartWindow}, creating it if necessary.
      *
-     * @return the singleton {@link StartWindow} instance
+     * @return the singleton instance of {@code StartWindow}
      * @throws IOException if the FXML file cannot be loaded during initialization
      */
     public static StartWindow getInstance() throws IOException {
@@ -58,25 +75,24 @@ public class StartWindow extends Stage {
     /**
      * Closes the current instance of the {@link StartWindow}, if it exists.
      * <p>
-     * This does not destroy the instance — it only hides the window from view.
+     * This method hides the window but does not destroy the singleton instance.
      * </p>
      */
     public static void closeInstance() {
-        Holder.INSTANCE.close();
+        if (Holder.INSTANCE != null) {
+            Holder.INSTANCE.close();
+        }
     }
 
     /**
-     * Displays the current instance of the {@link StartWindow}.
+     * Displays the {@link StartWindow}.
      * <p>
-     * If the window has not been initialized yet, it must first be created
-     * via {@link #getInstance()} before calling this method.
+     * If the window has not been created yet, it initializes a new instance before showing it.
      * </p>
      *
      * @throws IOException if the instance has not been properly initialized
      */
     public static void showInstance() throws IOException {
-        Holder.INSTANCE.show();
+        getInstance().show();
     }
 }
-
-

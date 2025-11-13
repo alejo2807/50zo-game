@@ -3,37 +3,52 @@ package Model.Cards;
 import java.util.*;
 
 /**
- * Represents a deck of playing cards.
+ * Represents a standard deck of 52 playing cards.
+ * This class manages a complete deck containing all combinations of 13 symbols
+ * and 4 suits. The deck is implemented as a Deque (double-ended queue) to
+ * efficiently support drawing cards from the top and adding cards back.
  * <p>
- * This class manages a standard deck of 52 cards (13 symbols × 4 suits).
- * The deck is implemented as a Deque (double-ended queue) and supports operations
- * such as drawing cards, adding cards, shuffling, and creating new decks from existing cards.
+ * The deck supports various operations including:
+ * <ul>
+ *   <li>Drawing cards from the top</li>
+ *   <li>Adding cards back to the deck</li>
+ *   <li>Shuffling the deck randomly</li>
+ *   <li>Creating new decks from existing card collections</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Upon creation, the deck is automatically initialized with all 52 cards
+ * and shuffled randomly to ensure fair play.
  * </p>
  *
- * @author [Your Name]
+ * @author Juan-David-Brandon
  * @version 1.0
+ * @since 2025
  */
 public class Deck {
     /**
      * The collection of cards in this deck, implemented as a Deque.
+     * Cards are stored in LIFO (Last-In-First-Out) order with the
+     * top of the deck at the head of the deque.
      */
     private Deque<Card> deck;
 
     /**
      * List of all card symbols in a standard deck.
-     * Contains: 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A.
+     * Contains 13 symbols: 2, 3, 4, 5, 6, 7, 8, 9, 10, J (Jack), Q (Queen), K (King), A (Ace).
      */
     private final List<String> symbols = List.of("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A");
 
     /**
      * List of all card suits in a standard deck.
-     * Contains: clubs, diamonds, hearts, spades.
+     * Contains 4 suits: clubs, diamonds, hearts, spades.
      */
     private final List<String> suits = List.of("clubs", "diamonds", "hearts", "spades");
 
     /**
-     * Constructs a new shuffled Deck containing all 52 standard playing cards.
-     * The deck is automatically initialized and shuffled upon creation.
+     * Constructs a new Deck containing all 52 standard playing cards.
+     * The deck is automatically initialized with one card for each combination
+     * of symbol and suit, then shuffled randomly to ensure unpredictability.
      */
     public Deck() {
         deck = new ArrayDeque<>();
@@ -41,10 +56,13 @@ public class Deck {
     }
 
     /**
-     * Initializes the deck with all 52 cards and shuffles them.
+     * Initializes the deck with all 52 cards and shuffles them randomly.
+     * Creates one card for each combination of the 13 symbols and 4 suits,
+     * assigns the appropriate image file path to each card based on its
+     * symbol and suit, then shuffles them using a secure random algorithm
+     * before adding them to the deck.
      * <p>
-     * Creates one card for each combination of symbol and suit, assigns the appropriate
-     * image file path to each card, shuffles them randomly, and adds them to the deck.
+     * The image file path format is: {@code /deck/{symbol}_of_{suit}.png}
      * </p>
      */
     private void initializeDeck() {
@@ -65,8 +83,9 @@ public class Deck {
 
     /**
      * Adds a card to the top of the deck.
+     * The card becomes the next card to be drawn when {@link #getCard()} is called.
      *
-     * @param card the card to add to the deck
+     * @param card the card to add to the top of the deck
      */
     public void addCard(Card card) {
         deck.push(card);
@@ -74,22 +93,25 @@ public class Deck {
 
     /**
      * Removes and returns the top card from the deck.
+     * This operation reduces the deck size by one.
      *
      * @return the card from the top of the deck
-     * @throws NoSuchElementException if the deck is empty
+     * @throws NoSuchElementException if the deck is empty and no card can be drawn
      */
     public Card getCard() {
         return deck.pop();
     }
 
     /**
-     * Creates a new deck from a list of cards.
+     * Creates a new deck from a list of cards and adds them to the current deck.
+     * The provided cards are shuffled randomly before being added to ensure
+     * randomness. This method is particularly useful for recycling discarded
+     * cards back into play when the main deck runs low or empty.
      * <p>
-     * The provided cards are shuffled and then added to the deck.
-     * This method is useful for recycling discarded cards back into play.
+     * The cards are added to the top of the existing deck in shuffled order.
      * </p>
      *
-     * @param cards the list of cards to create the new deck from
+     * @param cards the list of cards to shuffle and add to the deck
      */
     public void makeNewDeck(List<Card> cards) {
         Collections.shuffle(cards);
@@ -99,9 +121,15 @@ public class Deck {
     }
 
     /**
-     * Returns the underlying Deque containing all cards in the deck.
+     * Returns the underlying Deque containing all cards currently in the deck.
+     * This provides direct access to the deck's internal structure and allows
+     * for iteration or size checking.
+     * <p>
+     * <strong>Note:</strong> Modifying the returned Deque directly will affect
+     * the internal state of the deck.
+     * </p>
      *
-     * @return the deck as a Deque of cards
+     * @return the deck as a Deque of Card objects
      */
     public Deque<Card> getDeck() {
         return deck;
@@ -109,10 +137,10 @@ public class Deck {
 
     /**
      * Shuffles all cards currently in the deck randomly.
-     * <p>
-     * The deck is converted to a list, shuffled using {@link Collections#shuffle(List)},
-     * and then restored to the Deque structure.
-     * </p>
+     * The deck is temporarily converted to a list, shuffled using
+     * {@link Collections#shuffle(List)}, cleared, and then restored
+     * with the shuffled cards. This ensures a secure random distribution
+     * of cards throughout the deck.
      */
     public void shuffle() {
         // Simple and safe approach
@@ -123,11 +151,10 @@ public class Deck {
     }
 
     /**
-     * Main method for testing the Deck class.
-     * <p>
-     * Creates a deck, draws one card, prints its symbol, and then prints
-     * all remaining cards in the deck.
-     * </p>
+     * Main method for testing the Deck class functionality.
+     * Creates a new deck, draws one card from the top, prints its symbol,
+     * and then prints the symbols of all remaining cards in the deck to
+     * demonstrate proper initialization and card drawing.
      *
      * @param args command line arguments (not used)
      */

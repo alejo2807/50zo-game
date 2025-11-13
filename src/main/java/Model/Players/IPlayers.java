@@ -8,15 +8,17 @@ import Model.Exceptions.InvalidCardException;
 import java.util.List;
 
 /**
- * Interface defining the basic operations for a player in the card game.
+ * The {@code IPlayers} interface defines the fundamental behaviors and actions
+ * that any player in the card game must implement.
  * <p>
- * This interface establishes the contract for player behavior, including
- * managing cards in hand, drawing cards, and playing cards to a pile.
- * All player implementations must provide concrete implementations of these methods.
+ * This interface establishes a clear contract for handling a player's hand,
+ * drawing cards from the deck, and playing cards onto a pile. Concrete player
+ * implementations (such as human or AI players) must provide specific logic for
+ * each of these operations.
  * </p>
  *
- * @author [Your Name]
- * @version 1.0
+ * @author Juan-David-Brandon
+ * @since 2025
  */
 public interface IPlayers {
 
@@ -31,21 +33,22 @@ public interface IPlayers {
      * Plays a card from the player's hand to the specified card pile.
      * <p>
      * The card is identified by its index position in the player's hand.
-     * This method may validate whether the card can be legally played according
-     * to game rules.
+     * This method should verify that the card can be legally played according
+     * to the current game rules.
      * </p>
      *
-     * @param IndexCard the index of the card in the player's hand to be played
-     * @param cardPile the pile where the card will be placed
-     * @throws InvalidCardException if the card cannot be played according to game rules
+     * @param indexCard the index of the card in the player's hand to be played
+     * @param cardPile  the pile where the card will be placed
+     * @throws InvalidCardException if the card cannot be played according to the game rules
+     * @throws IllegalArgumentException if the provided card index is invalid
      */
-    void putCard(int IndexCard, CardPile cardPile) throws InvalidCardException;
+    void putCard(int indexCard, CardPile cardPile) throws InvalidCardException;
 
     /**
-     * Initializes or draws the player's starting hand.
+     * Draws or initializes the player's starting hand.
      * <p>
-     * This method is typically called at the beginning of a game or round
-     * to give the player their initial set of cards.
+     * Typically called at the beginning of a game or round to give the player
+     * their initial set of cards.
      * </p>
      */
     void takeHand();
@@ -53,7 +56,7 @@ public interface IPlayers {
     /**
      * Returns the list of cards currently in the player's hand.
      *
-     * @return a list containing all cards in the player's hand
+     * @return a list containing all cards currently held by the player
      */
     List<Card> getHand();
 }

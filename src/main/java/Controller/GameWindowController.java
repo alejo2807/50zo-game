@@ -282,12 +282,12 @@ public class GameWindowController {
     @FXML
     void handleCardClick(MouseEvent event) {
         if (turnManager.getActualTurn() != playerHuman.getTurn()) {
-            System.out.println("⚠️ No es tu turno.");
+            System.out.println("⚠ No es tu turno.");
             return;
         }
 
         if (cardPlayed) {
-            System.out.println("⚠️ Ya jugaste una carta este turno.");
+            System.out.println("⚠ Ya jugaste una carta este turno.");
             return;
         }
 
@@ -296,7 +296,7 @@ public class GameWindowController {
 
         // Verify the index is valid
         if (index < 0 || index >= playerHuman.getHand().size()) {
-            System.out.println("⚠️ Carta no válida.");
+            System.out.println("⚠ Carta no válida.");
             return;
         }
 
@@ -315,7 +315,7 @@ public class GameWindowController {
             }
 
             printCardsHuman();
-            System.out.println("✅ Jugaste: " + top.getSymbol() + " | Nuevo valor pila: " + pile.getValuePile());
+            System.out.println(" Jugaste: " + top.getSymbol() + " | Nuevo valor pila: " + pile.getValuePile());
 
         } catch (InvalidCardException e) {
             // Invalid card - show message and do nothing
@@ -338,23 +338,23 @@ public class GameWindowController {
 
         // Verify it's the human's turn
         if (turnManager.getActualTurn() != playerHuman.getTurn()) {
-            System.out.println("⚠️ No es tu turno.");
+            System.out.println("⚠ No es tu turno.");
             return;
         }
 
         if (!cardPlayed) {
-            System.out.println("⚠️ Debes jugar una carta antes de tomar una nueva.");
+            System.out.println("⚠ Debes jugar una carta antes de tomar una nueva.");
             return;
         }
 
         Card newCard = deck.getCard();
         if (newCard == null) {
-            System.out.println("⚠️ El mazo está vacío.");
+            System.out.println("⚠ El mazo está vacío.");
             return;
         }
 
         playerHuman.takeCard(newCard);
-        System.out.println("✅ Robaste: " + newCard.getSymbol() + " (valor=" + newCard.getValue() + ")");
+        System.out.println(" Robaste: " + newCard.getSymbol() + " (valor=" + newCard.getValue() + ")");
         printCardsHuman();
 
         // Finalize the human player's turn
@@ -366,7 +366,7 @@ public class GameWindowController {
         }
 
         updateTurnLabel();
-        System.out.println("🔄 Turno pasado a jugador " + turnManager.getActualTurn());
+        System.out.println(" Turno pasado a jugador " + turnManager.getActualTurn());
     }
 
     /**

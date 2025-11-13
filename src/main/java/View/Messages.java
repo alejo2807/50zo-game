@@ -11,24 +11,25 @@ import java.io.IOException;
 /**
  * The {@code Messages} class represents a modal pop-up window
  * used to display game status messages such as victory, defeat, or general notifications.
- * <p>
+ * 
  * This class extends {@link Stage} and dynamically loads different FXML views
  * depending on the provided option. It serves as a lightweight user interface
  * for feedback at the end of the game or during specific in-game events.
- * </p>
+ * 
  *
- * <p><b>Usage example:</b></p>
+ * Usage example:
  * <pre>{@code
  * Messages winMessage = new Messages(1);
  * winMessage.show();
  * }</pre>
  *
- * <p>Available options:</p>
- * <ul>
- *   <li>{@code 1} → Displays the “You Win” message window.</li>
- *   <li>{@code 2} → Displays the “You Lose” message window.</li>
- *   <li>{@code 3} → Displays a general “Game” message window.</li>
- * </ul>
+ * Available options:
+ * 
+ *   {@code 1} -> Displays the "You Win" message window.
+ *   {@code 2} -> Displays the "You Lose" message window.
+ *   {@code 3} -> Displays a general "Game" message window.
+ *
+ * 
  *
  * @author Juan-David-Brandon
  * @since 2025
@@ -46,14 +47,14 @@ public class Messages extends Stage {
 
     /**
      * Constructs a new {@code Messages} window based on the specified option.
-     * <p>
+     * 
      * The constructor dynamically loads an FXML file depending on the option:
-     * <ul>
-     *   <li>{@code 1 → youWin.fxml}</li>
-     *   <li>{@code 2 → youLose.fxml}</li>
-     *   <li>{@code 3 → message.fxml}</li>
-     * </ul>
-     * </p>
+     * 
+     *   {@code 1 → youWin.fxml}
+     *   {@code 2 → youLose.fxml}
+     *   {@code 3 → message.fxml}
+     * 
+     * 
      *
      * @param option the type of message to display (1 = win, 2 = lose, 3 = general)
      * @throws IOException if the corresponding FXML file cannot be loaded

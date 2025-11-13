@@ -7,9 +7,9 @@ import java.util.ArrayList;
  * It handles advancing turns, tracking eliminated players, and maintaining a consistent
  * order of play.
  *
- * <p>This class ensures synchronization when accessing or modifying the turn state,
+ * This class ensures synchronization when accessing or modifying the turn state,
  * so it can be safely used in a multithreaded environment where multiple player threads
- * may interact simultaneously.</p>
+ * may interact simultaneously.
  *
  * @author Juan-David-Brandon
  * @since 2025
@@ -57,9 +57,9 @@ public class TurnManager {
 
     /**
      * Advances the turn to the next player in the list.
-     * <p>If the iterator reaches the end of the list, it loops back to the beginning.
+     * If the iterator reaches the end of the list, it loops back to the beginning.
      * Eliminated players are automatically skipped, since they are removed from
-     * {@code totalTurns}.</p>
+     * {@code totalTurns}.
      */
     public synchronized void passTurn() {
         System.out.println(totalTurns);
@@ -71,7 +71,7 @@ public class TurnManager {
         System.out.println(iterator);
         actualTurn = totalTurns.get(iterator);
 
-        System.out.println("🔄 TurnManager.passTurn(): New turn = " + actualTurn + " | Iterator: " + iterator);
+        System.out.println(" TurnManager.passTurn(): New turn = " + actualTurn + " | Iterator: " + iterator);
     }
 
     /**
@@ -79,13 +79,13 @@ public class TurnManager {
      */
     public synchronized void startGame() {
         actualTurn = 1;
-        System.out.println("🎮 TurnManager.startGame(): Game started, current turn = " + actualTurn);
+        System.out.println(" TurnManager.startGame(): Game started, current turn = " + actualTurn);
     }
 
     /**
      * Removes a player’s turn from the active list when they are eliminated.
-     * <p>This method also ensures that the iterator position remains valid after
-     * removal, preventing skipped or repeated turns.</p>
+     * This method also ensures that the iterator position remains valid after
+     * removal, preventing skipped or repeated turns.
      *
      * @param lasTurnEliminate the turn number corresponding to the eliminated player
      */
@@ -101,7 +101,7 @@ public class TurnManager {
                 }
 
                 totalTurns.remove(i);
-                System.out.println("🚫 Player " + lasTurnEliminate + " eliminated. Remaining turns: " + totalTurns);
+                System.out.println(" Player " + lasTurnEliminate + " eliminated. Remaining turns: " + totalTurns);
                 break; // Important to exit after removing
             }
         }

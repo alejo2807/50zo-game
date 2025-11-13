@@ -10,15 +10,15 @@ import java.util.Queue;
  * This class manages a queue-based card pile and calculates the total value
  * by summing all card values. It implements special game rules, including
  * automatic value adjustments for Aces when the pile exceeds certain thresholds.
- * <p>
+ * 
  * The pile maintains cards in FIFO (First-In-First-Out) order and provides
  * methods to add cards, retrieve the top card, and access cards below the top.
- * </p>
- * <p>
+ * 
+ * 
  * Special rule: When a card with value 10 (typically an Ace) is added and causes
  * the pile to exceed 50 points, the pile value is reduced by 9, effectively
  * treating the Ace as having a value of 1 instead of 10.
- * </p>
+ * 
  *
  * @author Juan-David-Brandon
  * @version 1.0
@@ -55,12 +55,12 @@ public class CardPile {
     /**
      * Adds a card to the pile and updates the total value accordingly.
      * The card is added to the rear of the queue, making it the new top card.
-     * <p>
+     * 
      * Special adjustment: If the added card has a value of 10 and adding it
      * causes the pile value to exceed 50, the pile value is reduced by 9.
      * This effectively treats the card as having a value of 1, simulating
      * the flexible value behavior of an Ace in many card games.
-     * </p>
+     * 
      *
      * @param card the card to add to the pile
      */
@@ -79,12 +79,12 @@ public class CardPile {
      * This method removes all cards except the top one from the pile and
      * returns them in the order they were added. This is useful for
      * transferring cards to a discard pile or recharge deck.
-     * <p>
+     * 
      * <strong>Important:</strong> This method modifies the pile by removing cards.
      * After calling this method, only the top card remains in the pile.
      * If the pile has only one card or is empty, an empty list is returned
      * and the pile remains unchanged.
-     * </p>
+     * 
      *
      * @return a list containing all cards below the top card in the order they
      * were added, or an empty list if pile size is 1 or less

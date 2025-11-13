@@ -8,19 +8,19 @@ import java.util.List;
  * This class monitors the main deck and, when it becomes empty, transfers cards
  * from the card pile (excluding the top card) back into the deck to ensure
  * continuous gameplay without interruption.
- * <p>
+ * 
  * The recharge process works as follows:
- * <ol>
- *   <li>Continuously monitors the deck every 500 milliseconds</li>
- *   <li>When the deck is empty, retrieves all cards from the pile except the top card</li>
- *   <li>Shuffles the retrieved cards randomly</li>
- *   <li>Adds the shuffled cards back to the deck</li>
- * </ol>
- * </p>
- * <p>
+ * 
+ *   Continuously monitors the deck every 500 milliseconds
+ *   When the deck is empty, retrieves all cards from the pile except the top card
+ *   Shuffles the retrieved cards randomly
+ *   Adds the shuffled cards back to the deck
+ * 
+ * 
+ * 
  * This thread runs continuously in the background throughout the game,
  * using synchronization to prevent concurrent modification issues with the deck.
- * </p>
+ * 
  *
  * @author Juan-David-Brandon
  * @version 1.0
@@ -56,15 +56,15 @@ public class RechargeDeck extends Thread {
      * every 500 milliseconds. When the deck is empty, it retrieves all cards
      * from the card pile (except the top card), shuffles them, and adds them
      * back to the deck.
-     * <p>
+     * 
      * The deck is synchronized during the recharge operation to prevent
      * concurrent access issues. If no cards are available in the pile
      * for recharging, a warning message is displayed.
-     * </p>
-     * <p>
+     * 
+     * 
      * The thread continues running until it is interrupted, at which point
      * it logs a termination message and exits gracefully.
-     * </p>
+     * 
      */
     @Override
     public void run() {
@@ -82,9 +82,9 @@ public class RechargeDeck extends Thread {
                             for (Card card : backCards) {
                                 deck.addCard(card);
                             }
-                            System.out.println("🔄 Deck recharged with " + backCards.size() + " cards.");
+                            System.out.println(" Deck recharged with " + backCards.size() + " cards.");
                         } else {
-                            System.out.println("⚠️ No cards available to recharge the deck.");
+                            System.out.println("⚠ No cards available to recharge the deck.");
                         }
                     }
                 }

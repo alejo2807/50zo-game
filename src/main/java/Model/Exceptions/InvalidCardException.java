@@ -7,20 +7,20 @@ import Model.Cards.Card;
  * the pile value to exceed the maximum allowed value of 50.
  * This exception is a core part of the game's rule enforcement mechanism,
  * preventing invalid moves and maintaining game integrity.
- * <p>
+ * 
  * This exception captures comprehensive information about the invalid play attempt,
  * including:
- * <ul>
- *   <li>The card that was attempted to be played</li>
- *   <li>The current pile value before the attempt</li>
- *   <li>The resulting value that would exceed the limit</li>
- * </ul>
- * </p>
- * <p>
+ * 
+ *   The card that was attempted to be played
+ *   The current pile value before the attempt
+ *   The resulting value that would exceed the limit
+ * 
+ * 
+ * 
  * The exception provides both a basic error message (via {@link #getMessage()})
  * and a detailed, user-friendly message (via {@link #getDetailedMessage()}) that
  * can be displayed to players to explain why their move was rejected.
- * </p>
+ * 
  *
  * @author Juan-David-Brandon
  * @version 1.0
@@ -47,10 +47,10 @@ public class InvalidCardException extends Exception {
      * Constructs a new InvalidCardException with detailed information about the invalid play.
      * The exception message is automatically formatted in Spanish to include the card symbol,
      * card value, current pile value, and the resulting value that exceeds 50.
-     * <p>
+     * 
      * The resulting value is calculated as the sum of the current pile value
      * and the attempted card's value.
-     * </p>
+     * 
      *
      * @param card the card that cannot be played due to exceeding the pile limit
      * @param currentPileValue the current value of the pile before the attempted play
@@ -96,24 +96,24 @@ public class InvalidCardException extends Exception {
      * Returns a detailed, user-friendly message in Spanish describing why the card is invalid.
      * This message is formatted for display to players and includes all relevant
      * information about the failed play attempt.
-     * <p>
+     * 
      * The message includes:
-     * <ul>
-     *   <li>The symbol of the invalid card</li>
-     *   <li>The current pile value</li>
-     *   <li>The value of the attempted card</li>
-     *   <li>What the resulting value would be</li>
-     *   <li>The maximum allowed value (50)</li>
-     * </ul>
-     * </p>
+     * 
+     *   The symbol of the invalid card
+     *   The current pile value
+     *   The value of the attempted card
+     *   What the resulting value would be
+     *   The maximum allowed value (50)
+     * 
+     * 
      *
      * @return a formatted string with detailed information about the invalid play,
      *         suitable for display to the player
      */
     public String getDetailedMessage() {
-        return String.format("⚠️ Carta inválida: %s\n" +
-                        "   Valor actual de la pila: %d\n" +
-                        "   Valor de la carta: %d\n" +
+        return String.format("⚠ Carta inválida: %s" +
+                        "   Valor actual de la pila: %d" +
+                        "   Valor de la carta: %d" +
                         "   Resultado sería: %d (Máximo permitido: 50)",
                 attemptedCard.getSymbol(), currentPileValue, attemptedCard.getValue(), resultingValue);
     }

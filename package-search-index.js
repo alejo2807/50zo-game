@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"org.example._50zo","l":"Controller"},{"m":"org.example._50zo","l":"Model.Cards"},{"m":"org.example._50zo","l":"Model.Exceptions"},{"m":"org.example._50zo","l":"Model.Players"},{"m":"org.example._50zo","l":"org.example._50zo"},{"m":"org.example._50zo","l":"View"}];updateSearchResults();

@@ -10,15 +10,15 @@ import java.util.ArrayList;
  * have specific numeric values according to game rules. The card value
  * is automatically calculated based on its symbol during construction
  * or when the symbol is changed.
- * <p>
+ * 
  * Card value rules:
- * <ul>
- *   <li>Cards 2-8 and 10 have their face value</li>
- *   <li>J, Q, K have a value of -10</li>
- *   <li>9 has a value of 0</li>
- *   <li>A (Ace) has a default value of 10</li>
- * </ul>
- * </p>
+ * 
+ *   Cards 2-8 and 10 have their face value
+ *   J, Q, K have a value of -10
+ *   9 has a value of 0
+ *   A (Ace) has a default value of 10
+ * 
+ * 
  *
  * @author Juan-David-Brandon
  * @version 1.0

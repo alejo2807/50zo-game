@@ -12,10 +12,10 @@ import java.util.List;
  * The {@code AdapterPlayers} class serves as an abstract base for different types of players
  * participating in the card game. It implements the {@link IPlayers} interface and extends
  * {@link Thread} to allow concurrent execution of player actions.
- * <p>
+ * 
  * Each player has its own hand of cards, a turn order, and access to shared game elements
  * such as the deck, card pile, and turn manager.
- * </p>
+ * 
  *
  * @author Juan-David-Brandon
  * @since 2025
@@ -156,9 +156,9 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     /**
      * Checks if the player has any playable cards that can be placed on the pile
      * without exceeding a total value of 50.
-     * <p>
+     * 
      * If no valid cards exist, the player is marked as eliminated.
-     * </p>
+     * 
      *
      * @return {@code true} if the player has valid cards to play; {@code false} otherwise
      */
@@ -172,7 +172,7 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
         boolean hasValid = cont > 0;
         if (!hasValid) {
             isPlaying = false;
-            System.out.println("❌ Player " + turn + " eliminated: no valid cards (pile=" + cardPile.getValuePile() + ")");
+            System.out.println(" Player " + turn + " eliminated: no valid cards (pile=" + cardPile.getValuePile() + ")");
         }
         return hasValid;
     }
@@ -202,6 +202,6 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     public void initializePlayer() {
         isPlaying = true;
         takeHand();
-        System.out.println("✅ Player " + turn + " initialized with " + hand.size() + " cards");
+        System.out.println(" Player " + turn + " initialized with " + hand.size() + " cards");
     }
 }

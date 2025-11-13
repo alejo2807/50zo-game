@@ -8,15 +8,15 @@ import java.io.IOException;
 
 /**
  * The {@code StartWindow} class represents the main menu window
- * of the <b>Cincuentazo</b> application.
- * <p>
+ * of the Cincuentazo application.
+ * 
  * This class extends {@link Stage} and manages the application's main menu
  * interface defined in the {@code MainMenu.fxml} file. It follows the
- * <b>Singleton design pattern</b> to ensure that only one instance of the
+ * Singleton design pattern to ensure that only one instance of the
  * main menu window exists during the application's lifecycle.
- * </p>
+ * 
  *
- * <p><b>Usage example:</b></p>
+ * Usage example:
  * <pre>{@code
  * StartWindow mainMenu = StartWindow.getInstance();
  * mainMenu.show();
@@ -29,10 +29,10 @@ public class StartWindow extends Stage {
 
     /**
      * Private constructor that initializes the main menu window.
-     * <p>
+     * 
      * Loads the FXML layout, sets the title, and configures the window
      * to be non-resizable.
-     * </p>
+     * 
      *
      * @throws IOException if the {@code MainMenu.fxml} file cannot be loaded
      */
@@ -49,10 +49,10 @@ public class StartWindow extends Stage {
 
     /**
      * Static inner class implementing the Singleton Holder pattern.
-     * <p>
+     * 
      * Ensures thread-safe, lazy initialization of the {@link StartWindow} instance
      * without requiring explicit synchronization.
-     * </p>
+     * 
      */
     private static class Holder {
         /** Singleton instance of the {@link StartWindow}. */
@@ -74,9 +74,9 @@ public class StartWindow extends Stage {
 
     /**
      * Closes the current instance of the {@link StartWindow}, if it exists.
-     * <p>
+     * 
      * This method hides the window but does not destroy the singleton instance.
-     * </p>
+     * 
      */
     public static void closeInstance() {
         if (Holder.INSTANCE != null) {
@@ -86,9 +86,9 @@ public class StartWindow extends Stage {
 
     /**
      * Displays the {@link StartWindow}.
-     * <p>
+     * 
      * If the window has not been created yet, it initializes a new instance before showing it.
-     * </p>
+     * 
      *
      * @throws IOException if the instance has not been properly initialized
      */

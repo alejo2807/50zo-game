@@ -10,21 +10,21 @@ import java.io.IOException;
 
 /**
  * Represents a human player in the card game.
- * <p>
+ * 
  * This class extends {@link AdapterPlayers} and defines the interaction logic
  * for a user-controlled player. Unlike {@link PlayerGPU}, this class relies on
  * user input to play cards and end turns.
- * </p>
+ * 
  *
- * <p>
+ * 
  * The human player:
- * <ul>
- *   <li>Waits for its turn before performing actions.</li>
- *   <li>Interacts with the game interface through {@link GameWindowController}.</li>
- *   <li>Receives visual messages through the {@link Messages} view class.</li>
- *   <li>Handles win/lose events using asynchronous UI operations.</li>
- * </ul>
- * </p>
+ * 
+ *   Waits for its turn before performing actions.
+ *   Interacts with the game interface through {@link GameWindowController}.
+ *   Receives visual messages through the {@link Messages} view class.
+ *   Handles win/lose events using asynchronous UI operations.
+ * 
+ * 
  *
  * @author Juan-David-Brandon
  * @since 2025
@@ -76,11 +76,11 @@ public class PlayerHuman extends AdapterPlayers {
 
     /**
      * Main execution loop of the human player.
-     * <p>
+     * 
      * This method runs in a separate thread, waiting for the player’s turn to start.
      * During its turn, it allows the user to play a card manually via the interface.
      * The thread remains active while {@code isPlaying} is true.
-     * </p>
+     * 
      */
     @Override
     public void run() {
@@ -112,7 +112,7 @@ public class PlayerHuman extends AdapterPlayers {
                             } catch (InterruptedException ignored) {}
                         }).start();
                     });
-                    System.out.println("🚫 Human player eliminated (no valid cards)");
+                    System.out.println(" Human player eliminated (no valid cards)");
                     isPlaying = false;
                     lock.notifyAll();
                     break;
@@ -120,7 +120,7 @@ public class PlayerHuman extends AdapterPlayers {
 
                 // Wait for the human player to play and draw a card
                 turnFinished = false;
-                System.out.println("👤 It's the human player's turn. Waiting for action...");
+                System.out.println(" It's the human player's turn. Waiting for action...");
 
                 if (turnManager.getActualTurn() == turn && !isWin) {
                     Platform.runLater(() -> {
@@ -144,7 +144,7 @@ public class PlayerHuman extends AdapterPlayers {
                     }
                 }
 
-                System.out.println("👤 Human player finished their turn.");
+                System.out.println(" Human player finished their turn.");
 
                 // Check if the human player is the last remaining participant
                 if (turnManager.getTotalTurns().size() == 1 && isPlaying) {
@@ -170,10 +170,10 @@ public class PlayerHuman extends AdapterPlayers {
 
     /**
      * Signals that the player has finished their turn.
-     * <p>
+     * 
      * This method is typically called by the controller once the player
      * has played a card and drawn a new one.
-     * </p>
+     * 
      */
     public void finishTurn() {
         synchronized (lock) {
@@ -202,9 +202,9 @@ public class PlayerHuman extends AdapterPlayers {
 
     /**
      * Displays a win or lose message depending on the game outcome.
-     * <p>
+     * 
      * This method closes the game window and shows the appropriate message asynchronously.
-     * </p>
+     * 
      *
      * @param i the message type: {@code 1} for win, {@code 2} for loss
      */

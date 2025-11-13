@@ -7,19 +7,19 @@ import java.util.*;
  * This class manages a complete deck containing all combinations of 13 symbols
  * and 4 suits. The deck is implemented as a Deque (double-ended queue) to
  * efficiently support drawing cards from the top and adding cards back.
- * <p>
+ * 
  * The deck supports various operations including:
- * <ul>
- *   <li>Drawing cards from the top</li>
- *   <li>Adding cards back to the deck</li>
- *   <li>Shuffling the deck randomly</li>
- *   <li>Creating new decks from existing card collections</li>
- * </ul>
- * </p>
- * <p>
+ * 
+ *   Drawing cards from the top
+ *   Adding cards back to the deck
+ *   Shuffling the deck randomly
+ *   Creating new decks from existing card collections
+ * 
+ * 
+ * 
  * Upon creation, the deck is automatically initialized with all 52 cards
  * and shuffled randomly to ensure fair play.
- * </p>
+ * 
  *
  * @author Juan-David-Brandon
  * @version 1.0
@@ -61,9 +61,9 @@ public class Deck {
      * assigns the appropriate image file path to each card based on its
      * symbol and suit, then shuffles them using a secure random algorithm
      * before adding them to the deck.
-     * <p>
+     * 
      * The image file path format is: {@code /deck/{symbol}_of_{suit}.png}
-     * </p>
+     * 
      */
     private void initializeDeck() {
         List<Card> tempList = new ArrayList<>();
@@ -107,9 +107,9 @@ public class Deck {
      * The provided cards are shuffled randomly before being added to ensure
      * randomness. This method is particularly useful for recycling discarded
      * cards back into play when the main deck runs low or empty.
-     * <p>
+     * 
      * The cards are added to the top of the existing deck in shuffled order.
-     * </p>
+     * 
      *
      * @param cards the list of cards to shuffle and add to the deck
      */
@@ -124,10 +124,10 @@ public class Deck {
      * Returns the underlying Deque containing all cards currently in the deck.
      * This provides direct access to the deck's internal structure and allows
      * for iteration or size checking.
-     * <p>
+     * 
      * <strong>Note:</strong> Modifying the returned Deque directly will affect
      * the internal state of the deck.
-     * </p>
+     * 
      *
      * @return the deck as a Deque of Card objects
      */

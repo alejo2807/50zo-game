@@ -54,7 +54,16 @@ public class GameWindow extends Stage {
         Holder.INSTANCE.close();
     }
 
-
+    /**
+     * Hides the window AND removes the stored instance, forcing a new one
+     * to be created on the next call to getInstance().
+     */
+    public static void destroyInstance() {
+        if (Holder.INSTANCE != null) {
+            Holder.INSTANCE.close(); // Oculta/Cierra la ventana de JavaFX
+            Holder.INSTANCE = null;  // <--- ¡Esto es lo crucial!
+        }
+    }
 
 
 }

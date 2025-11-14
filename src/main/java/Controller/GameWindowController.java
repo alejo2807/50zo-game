@@ -430,11 +430,12 @@ public class GameWindowController {
         int currentTurn = turnManager.getActualTurn();
 
         if (currentTurn == playerHuman.getTurn()) {
-            turnLabel.setText("Turno de: Player");
+            turnLabel.setText("Your turn :)");
         } else {
             // Bot's turn (turn 2, 3, or 4 = Bot 1, 2, or 3)
             int botNumber = currentTurn - 1; // Turn 2 = Bot 1, Turn 3 = Bot 2, etc.
             turnLabel.setText("Turno de: Bot " + botNumber);
+
         }
     }
 

@@ -97,3 +97,16 @@
     -fx-background-position: center;
     -fx-background-size: 50 50;
 }
+
+.backButton:hover {
+    -fx-background-color: linear-gradient(to bottom, #dbb76e, #b89448);
+    -fx-border-color: #ffffff;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 20, 0.6, 0, 7);
+}
+.backButton:pressed {
+    -fx-background-color: linear-gradient(to bottom, #9d7d3a, #7a5f2b);
+    -fx-translate-y: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.3, 0, 2);
+}

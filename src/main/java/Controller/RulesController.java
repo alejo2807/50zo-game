@@ -3,8 +3,12 @@ package Controller;
 import View.RulesWindow;
 import View.StartWindow;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import java.io.IOException;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 /**
  * Controller responsible for handling interactions within the Rules window.
@@ -25,7 +29,6 @@ public class RulesController {
      */
     @FXML
     private Button backButton;
-
     /**
      * Handles the action executed when the user presses the
      * "Back" button inside the Rules window.
@@ -37,7 +40,7 @@ public class RulesController {
      * @throws RuntimeException if the transition to the StartWindow fails
      */
     @FXML
-    void backToSelection() {
+    void backToStartWindow() {
         try {
             // Close the rules window instance (Singleton)
             RulesWindow.closeInstance();
@@ -58,6 +61,25 @@ public class RulesController {
      */
     @FXML
     public void initialize() {
-        // Optional initialization logic
+        javafx.application.Platform.runLater(() -> {
+            backButton.getScene().setOnKeyPressed(this::handleKeyPress);
+        });
+
     }
+
+    private void handleKeyPress(KeyEvent event) {
+        if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
+            backToMenu();
+        }
+    }
+    private void backToMenu() {
+        try {
+            RulesWindow.closeInstance(); // Cerrar con Singleton
+            StartWindow.getInstance().show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

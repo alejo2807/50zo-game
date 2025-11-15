@@ -43,6 +43,7 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     /** The main deck of cards used for drawing new ones. */
     protected Deck deck;
 
+    protected String playerType;
     /**
      * Constructs a new player adapter with the specified game components and configuration.
      *
@@ -52,15 +53,18 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
      * @param turnManager  the manager that controls turn order
      * @param cardPile     the pile of cards currently in play
      */
-    public AdapterPlayers(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile) {
+    public AdapterPlayers(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile, String playerType) {
         this.deck = deck;
         this.isPlaying = false;
         this.turn = myTurn;
         this.lock = lock;
         this.turnManager = turnManager;
         this.cardPile = cardPile;
+        this.playerType = playerType;
     }
-
+    public String getPlayerType() {
+        return playerType;
+    }
     /**
      * Constructs a new player adapter initialized with a deck only.
      * This version automatically sets the player as active.
@@ -99,6 +103,11 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
 
         Card card = hand.get(indexCard);
         int newValue = card.getValue() + cardPile.getValuePile();
+        if(card.getSymbol().equals("A")){
+            if(card.getValue()+ cardPile.getValuePile() > 50 && card.getValue()-9 + cardPile.getValuePile() <= 50) {
+                newValue += -9;
+            }
+        }
 
         // Validate that the new pile value does not exceed 50
         if (newValue > 50) {
@@ -165,14 +174,18 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     public boolean hasValidCards() {
         int cont = 0;
         for (Card card : hand) {
-            if (card.getValue() + cardPile.getValuePile() <= 50) {
+            if(card.getSymbol().equals("A")) {
+                if(card.getValue()+ cardPile.getValuePile() <= 50 || card.getValue()-9 + cardPile.getValuePile() <= 50) {
+                    cont++;
+                }
+            }
+            else if(card.getValue() + cardPile.getValuePile() <= 50) {
                 cont++;
             }
         }
         boolean hasValid = cont > 0;
         if (!hasValid) {
             isPlaying = false;
-            System.out.println(" Player " + turn + " eliminated: no valid cards (pile=" + cardPile.getValuePile() + ")");
         }
         return hasValid;
     }

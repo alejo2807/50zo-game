@@ -7,10 +7,12 @@ import Model.Cards.RechargeDeck;
 import Model.Exceptions.InvalidCardException;
 import Model.Players.PlayerGPU;
 import Model.Players.PlayerHuman;
+import Model.Players.TakeWiner;
 import Model.Players.TurnManager;
 import View.GameWindow;
 import View.Messages;
 import View.SelectionPlayers;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -156,6 +158,7 @@ public class GameWindowController {
      */
     private boolean cardPlayed = false;
 
+    private TakeWiner takeWiner;
     /**
      * Sets the total number of GPU players for the game.
      *
@@ -179,6 +182,7 @@ public class GameWindowController {
         deck = new Deck();
         turnManager = new TurnManager(totalPlayersGPU+1);
 
+
         lock = new Object();
         // Officially starts turn 1
         synchronized (lock) {
@@ -188,14 +192,18 @@ public class GameWindowController {
         pile = new CardPile(deck);
         rechargeDeck = new RechargeDeck(deck, pile);
         rechargeDeck.start();
+
+
         playerGPUList = new ArrayList<>();
-        playerHuman = new PlayerHuman(deck, 1, lock, turnManager, pile);
+        playerHuman = new PlayerHuman(deck, 1, lock, turnManager, pile,"YOU");
         playerHuman.initializePlayer();
         for(int i = 2; i <= totalPlayersGPU+1; i++){
-            playerGPU = new PlayerGPU(deck, i, lock, turnManager, pile, this);
+            playerGPU = new PlayerGPU(deck, i, lock, turnManager, pile, this, "GPU "+Integer.toString(i-1));
             playerGPUList.add(playerGPU);
             playerGPU.initializePlayer();
         }
+        takeWiner = new TakeWiner(turnManager, lock, playerHuman, playerGPUList);
+        takeWiner.start();
 
         printCardsHuman();
         printCardsGPU();
@@ -219,15 +227,22 @@ public class GameWindowController {
      * card images from the player's hand. If the hand has fewer than 4 cards,
      * the remaining ImageViews are set to null.
      */
-    void printCardsHuman() {
-        for (int i = 0; i < 4; i++) {
-            ImageView imageView = (ImageView) playerCards.getChildren().get(i);
-            if (i < playerHuman.getHand().size()) {
-                Image image = new Image(getClass().getResourceAsStream(playerHuman.getHand().get(i).getUrl()));
-                imageView.setImage(image);
-            } else {
-                imageView.setImage(null);
+    public void printCardsHuman() {
+        if(playerHuman.getIsPlaying()){
+
+            for (int i = 0; i < 4; i++) {
+                ImageView imageView = (ImageView) playerCards.getChildren().get(i);
+                if (i < playerHuman.getHand().size()) {
+                    Image image = new Image(getClass().getResourceAsStream(playerHuman.getHand().get(i).getUrl()));
+                    imageView.setImage(image);
+                } else {
+                    imageView.setImage(null);
+                }
             }
+
+        }
+        else{
+            playerCards.getChildren().clear();
         }
     }
 
@@ -271,7 +286,32 @@ public class GameWindowController {
         // Update labels dynamically
         configureLabelVisibility();
     }
+    /**
+     * Elimina las cartas del jugador humano cuando es eliminado
+     */
+    public void deleteCardsPlayer(){
+        // No verificar playerHuman, solo ocultar directamente
+        playerCards.setVisible(false);
 
+
+    }
+    public void notifyHumanEliminated() {
+        Platform.runLater(() -> {
+            // Ocultar las cartas del jugador
+            deleteCardsPlayer();
+
+            // Cambiar el estilo del label del jugador
+            if (labelPlayer != null) {
+                labelPlayer.setText("Player ✖");
+                labelPlayer.setStyle("-fx-text-fill: #FF0000;");
+            }
+
+
+            updateTurnLabel();
+
+            System.out.println("👻 Human player eliminated - UI updated");
+        });
+    }
     /**
      * Handles mouse click events on the human player's cards.
      * This method validates that it's the player's turn and that they haven't already

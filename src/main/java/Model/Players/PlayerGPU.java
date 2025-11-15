@@ -46,8 +46,8 @@ public class PlayerGPU extends AdapterPlayers {
      * @param cardPile     the shared pile of cards where players place their cards
      * @param controller   the controller responsible for UI updates
      */
-    public PlayerGPU(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile, GameWindowController controller) {
-        super(deck, myTurn, lock, turnManager, cardPile);
+    public PlayerGPU(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile, GameWindowController controller, String playerType) {
+        super(deck, myTurn, lock, turnManager, cardPile, playerType);
         this.controller = controller;
     }
 
@@ -60,28 +60,49 @@ public class PlayerGPU extends AdapterPlayers {
      * and updates the interface on the JavaFX application thread.
      * 
      */
-    @Override
     public void run() {
-        System.out.println("GPU " + turn + " thread started");
+        System.out.println("🤖 GPU " + turn + " thread started");
 
         while (isPlaying) {
             synchronized (lock) {
-                System.out.println(turnManager.getTotalTurns());
-                System.out.println("CURRENT TURN  " + turnManager.getActualTurn());
+                System.out.println("GPU " + turn + " - Total players: " + turnManager.getTotalTurns().size());
+                System.out.println("CURRENT TURN: " + turnManager.getActualTurn());
+
+                // VERIFICAR SI ES EL ÚNICO JUGADOR RESTANTE (GANADOR)
+                if (turnManager.getTotalTurns().size() == 1) {
+                    System.out.println("🏆 GPU " + turn + " is the only player left - WINNER!");
+                    isPlaying = false;
+                    lock.notifyAll(); // Despertar a TakeWiner
+                    break;
+                }
 
                 // Wait until it's this player's turn
                 while (isPlaying && turnManager.getActualTurn() != turn) {
                     try {
                         lock.wait();
                     } catch (InterruptedException e) {
-                        System.err.println(" GPU " + turn + " interrupted while waiting for turn");
+                        System.err.println("❌ GPU " + turn + " interrupted while waiting for turn");
                         return;
                     }
                 }
 
+                // VERIFICAR DE NUEVO después de despertar
+                if (turnManager.getTotalTurns().size() == 1) {
+                    System.out.println("🏆 GPU " + turn + " is the winner after waking up!");
+                    isPlaying = false;
+                    lock.notifyAll();
+                    break;
+                }
+
+                // Verificar si sigue jugando después de despertar
+                if (!isPlaying) {
+                    System.out.println("💤 GPU " + turn + " no longer playing, exiting");
+                    break;
+                }
+
                 // If player has no valid cards, return them to the deck and leave the game
                 if (!hasValidCards()) {
-                    System.out.println(" GPU " + turn + " eliminated (no valid cards)");
+                    System.out.println("❌ GPU " + turn + " eliminated (no valid cards)");
 
                     returnCardsToDecK();
                     Platform.runLater(() -> controller.printCardsGPU());
@@ -94,13 +115,13 @@ public class PlayerGPU extends AdapterPlayers {
                     break;
                 }
 
-                System.out.println(" GPU " + turn + " starts its turn");
+                System.out.println("🎮 GPU " + turn + " starts its turn");
 
                 // Simulate thinking time before playing
                 try {
                     Thread.sleep(ThreadLocalRandom.current().nextInt(2000, 4001));
                 } catch (InterruptedException e) {
-                    System.err.println(" GPU " + turn + " interrupted while thinking");
+                    System.err.println("❌ GPU " + turn + " interrupted while thinking");
                     return;
                 }
 
@@ -116,12 +137,12 @@ public class PlayerGPU extends AdapterPlayers {
                             final Card finalCard = cardToPlay;
                             Platform.runLater(() -> controller.updatePileImage(finalCard));
 
-                            System.out.println(" GPU " + turn + " played: " + cardToPlay.getSymbol() +
+                            System.out.println("✅ GPU " + turn + " played: " + cardToPlay.getSymbol() +
                                     " | New pile value: " + cardPile.getValuePile());
                             cardPlayed = true;
 
                         } catch (InvalidCardException e) {
-                            System.out.println(" GPU " + turn + " attempted invalid card, trying next...");
+                            System.out.println("⚠ GPU " + turn + " attempted invalid card, trying next...");
                         }
                     }
 
@@ -136,7 +157,7 @@ public class PlayerGPU extends AdapterPlayers {
                 try {
                     Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 2000));
                 } catch (InterruptedException e) {
-                    System.err.println(" GPU " + turn + " interrupted before drawing a card");
+                    System.err.println("❌ GPU " + turn + " interrupted before drawing a card");
                     return;
                 }
 
@@ -144,7 +165,7 @@ public class PlayerGPU extends AdapterPlayers {
                 Card newCard = deck.getCard();
                 if (newCard != null) {
                     takeCard(newCard);
-                    System.out.println(" GPU " + turn + " drew: " + newCard.getSymbol());
+                    System.out.println("🎴 GPU " + turn + " drew: " + newCard.getSymbol());
                 } else {
                     System.out.println("⚠ GPU " + turn + ": deck empty, cannot draw card");
                 }
@@ -153,7 +174,7 @@ public class PlayerGPU extends AdapterPlayers {
                 Platform.runLater(() -> controller.printCardsGPU());
 
                 // End of turn
-                System.out.println(" GPU " + turn + " ends its turn");
+                System.out.println("✅ GPU " + turn + " ends its turn");
                 turnManager.passTurn();
                 controller.notifyBotTurnChange();
 
@@ -164,7 +185,6 @@ public class PlayerGPU extends AdapterPlayers {
         Platform.runLater(() -> controller.printCardsGPU());
         System.out.println("💤 GPU " + turn + " thread finished");
     }
-
     /**
      * Returns all cards from this player's hand back into the main deck.
      * 

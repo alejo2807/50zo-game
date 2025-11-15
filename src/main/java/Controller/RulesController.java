@@ -1,42 +1,63 @@
 package Controller;
 
-import View.SelectionPlayers; // Importa la clase de la ventana a la que quieres volver
-import View.RulesWindow;       // Importa la propia ventana de reglas para poder cerrarla
+import View.RulesWindow;
 import View.StartWindow;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import java.io.IOException;
 
+/**
+ * Controller responsible for handling interactions within the Rules window.
+ * This class manages navigation actions such as returning to the player selection
+ * or start window, ensuring smooth UI transitions.
+ *
+ * <p>The controller is linked to the RulesWindow FXML layout and responds to
+ * user actions via JavaFX event handling.</p>
+ *
+ * @author Juan-David-Brandon
+ * @version 1.0
+ * @since 2025
+ */
 public class RulesController {
 
+    /**
+     * Button used to return to the previous window.
+     */
     @FXML
     private Button backButton;
 
     /**
-     * Acción ejecutada al presionar el botón "Volver a Selección de Jugadores".
+     * Handles the action executed when the user presses the
+     * "Back" button inside the Rules window.
+     *
+     * <p>This method closes the RulesWindow instance and opens the
+     * StartWindow. Both windows are managed as singletons to avoid
+     * creating duplicate UI instances.</p>
+     *
+     * @throws RuntimeException if the transition to the StartWindow fails
      */
     @FXML
     void backToSelection() {
         try {
-            // 1. Oculta la ventana de Reglas
-            // Usamos el método estático si la ventana de reglas es Singleton,
-            // o simplemente backButton.getScene().getWindow().hide();
+            // Close the rules window instance (Singleton)
             RulesWindow.closeInstance();
 
-            // 2. Muestra la ventana de Selección de Jugadores
-            // Usamos getInstance().show() para asegurar que la instancia existe
+            // Show the Start Window (Singleton)
             StartWindow.getInstance().show();
 
         } catch (IOException e) {
-            System.err.println("❌ Error al volver a la selección de jugadores: " + e.getMessage());
-            e.printStackTrace();
+            // Re-throw as unchecked to avoid console output and maintain clean UI
+            throw new RuntimeException("Unable to return to the selection window.", e);
         }
     }
 
-    // Método initialize opcional, si necesitaras configurar algo al cargar el FXML
+    /**
+     * Initializes UI components after the FXML file has been loaded.
+     * <p>No special initialization is required for this controller,
+     * but the method is kept for future extension if needed.</p>
+     */
     @FXML
     public void initialize() {
-        // Por ejemplo, podrías deshabilitar el botón si fuera necesario,
-        // pero para esta funcionalidad, no se requiere nada especial.
+        // Optional initialization logic
     }
 }

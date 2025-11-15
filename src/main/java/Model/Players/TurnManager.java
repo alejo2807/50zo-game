@@ -62,11 +62,8 @@ public class TurnManager {
      * {@code totalTurns}.
      */
     public synchronized void passTurn() {
-        System.out.println("🔄 Passing turn. Current turns: " + totalTurns);
 
-        // Si solo queda un jugador, no avanzar más
         if (totalTurns.size() <= 1) {
-            System.out.println("🏆 Only one player remains, no need to pass turn");
             return;
         }
 
@@ -76,7 +73,6 @@ public class TurnManager {
         }
 
         actualTurn = totalTurns.get(iterator);
-        System.out.println("➡️ TurnManager.passTurn(): New turn = " + actualTurn + " | Iterator: " + iterator);
     }
 
     /**
@@ -84,7 +80,6 @@ public class TurnManager {
      */
     public synchronized void startGame() {
         actualTurn = 1;
-        System.out.println("🎮 TurnManager.startGame(): Game started, current turn = " + actualTurn);
     }
 
     /**
@@ -95,32 +90,21 @@ public class TurnManager {
      * @param lasTurnEliminate the turn number corresponding to the eliminated player
      */
     public synchronized void setLasTurnEliminate(int lasTurnEliminate) {
-        System.out.println("❌ Attempting to eliminate player " + lasTurnEliminate);
 
         for (int i = 0; i < this.totalTurns.size(); i++) {
             if (this.totalTurns.get(i) == lasTurnEliminate) {
 
-                // Adjust iterator BEFORE removing
                 if (i < iterator) {
-                    // El jugador eliminado está antes del iterador actual
                     iterator--;
                 } else if (i == iterator) {
-                    // El jugador eliminado ES el turno actual
-                    // No decrementar porque passTurn() incrementará
                     iterator--;
                 }
 
                 totalTurns.remove(i);
                 playersEliminate++;
 
-                System.out.println("✅ Player " + lasTurnEliminate + " eliminated.");
-                System.out.println("📊 Remaining turns: " + totalTurns);
-                System.out.println("📊 Iterator position: " + iterator);
-                System.out.println("📊 Total eliminated: " + playersEliminate);
-
-                // Si solo queda un jugador, es el ganador
                 if (totalTurns.size() == 1) {
-                    System.out.println("🏆 WINNER DETECTED: Player " + totalTurns.get(0));
+                    // Winner detected; no action required.
                 }
 
                 break;

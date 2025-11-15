@@ -9,15 +9,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The {@code AdapterPlayers} class serves as an abstract base for different types of players
- * participating in the card game. It implements the {@link IPlayers} interface and extends
- * {@link Thread} to allow concurrent execution of player actions.
- * 
- * Each player has its own hand of cards, a turn order, and access to shared game elements
- * such as the deck, card pile, and turn manager.
- * 
+ * The {@code AdapterPlayers} abstract class serves as the base implementation
+ * for all player types participating in the card game.
+ * <p>
+ * It implements the {@link IPlayers} interface and extends {@link Thread},
+ * allowing each player to run concurrently if needed.
+ * </p>
  *
- * @author Juan-David-Brandon
+ * <p>
+ * Each player maintains:
+ * </p>
+ * <ul>
+ *   <li>A hand of cards</li>
+ *   <li>A turn identifier</li>
+ *   <li>Access to the shared deck and card pile</li>
+ *   <li>A reference to the {@link TurnManager}</li>
+ *   <li>A synchronization lock for turn-based gameplay</li>
+ * </ul>
+ *
+ * <p>
+ * This class provides base behavior such as drawing cards, checking playable cards,
+ * and placing cards onto the central pile. Subclasses must implement specific
+ * gameplay behavior (e.g., human input or AI decisions).
+ * </p>
+ *
+ * @author Juan
+ * @author David
+ * @author Brandon
  * @since 2025
  */
 public abstract class AdapterPlayers extends Thread implements IPlayers {
@@ -28,32 +46,41 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     /** Indicates whether the player is still active in the game. */
     protected boolean isPlaying;
 
-    /** The player’s assigned turn number. */
+    /** The numeric turn assigned to the player. */
     protected int turn;
 
-    /** Synchronization lock object for controlling turn-based execution. */
+    /** Synchronization lock used for enforcing turn order. */
     protected Object lock;
 
-    /** Manages the order and state of player turns. */
+    /** Manages the order and status of player turns. */
     protected TurnManager turnManager;
 
-    /** The pile of cards played during the game. */
+    /** The central pile where cards are played. */
     protected CardPile cardPile;
 
-    /** The main deck of cards used for drawing new ones. */
+    /** The deck used for drawing new cards. */
     protected Deck deck;
 
+    /** Describes the type of player (e.g., Human, GPU). */
     protected String playerType;
+
     /**
-     * Constructs a new player adapter with the specified game components and configuration.
+     * Creates a new player adapter with all necessary game components.
      *
-     * @param deck         the main deck used for drawing cards
-     * @param myTurn       the turn number assigned to the player
-     * @param lock         the synchronization object used for turn control
-     * @param turnManager  the manager that controls turn order
-     * @param cardPile     the pile of cards currently in play
+     * @param deck        the shared deck used to draw cards
+     * @param myTurn      the turn number assigned to the player
+     * @param lock        the synchronization lock controlling turn access
+     * @param turnManager the manager responsible for turn sequencing
+     * @param cardPile    the central pile where played cards accumulate
+     * @param playerType  a string identifying the player type
      */
-    public AdapterPlayers(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile, String playerType) {
+    public AdapterPlayers(Deck deck,
+                          int myTurn,
+                          Object lock,
+                          TurnManager turnManager,
+                          CardPile cardPile,
+                          String playerType) {
+
         this.deck = deck;
         this.isPlaying = false;
         this.turn = myTurn;
@@ -62,14 +89,12 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
         this.cardPile = cardPile;
         this.playerType = playerType;
     }
-    public String getPlayerType() {
-        return playerType;
-    }
+
     /**
-     * Constructs a new player adapter initialized with a deck only.
-     * This version automatically sets the player as active.
+     * Creates a simplified player adapter using only a deck.
+     * This constructor automatically marks the player as active.
      *
-     * @param deck the deck from which the player will draw cards
+     * @param deck the deck used for drawing cards
      */
     public AdapterPlayers(Deck deck) {
         this.deck = deck;
@@ -77,7 +102,16 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     }
 
     /**
-     * Adds a specified card to the player's hand.
+     * Returns the identifier describing the type of player.
+     *
+     * @return the player type string
+     */
+    public String getPlayerType() {
+        return playerType;
+    }
+
+    /**
+     * Adds a card to the player's hand.
      *
      * @param card the card to add
      */
@@ -87,13 +121,16 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     }
 
     /**
-     * Attempts to play a card from the player's hand at the given index.
-     * If the card would cause the pile's total value to exceed 50, an {@link InvalidCardException} is thrown.
+     * Attempts to play the card at the given index.
+     * <p>
+     * Validates that the card does not cause the pile to exceed 50 points.
+     * Special handling is applied for Ace cards (A), which may adopt two values.
+     * </p>
      *
-     * @param indexCard the index of the card in the player's hand
-     * @param cardPile  the card pile where the card will be placed
-     * @throws InvalidCardException if playing the card exceeds the value limit
-     * @throws IllegalArgumentException if the provided index is invalid
+     * @param indexCard the position of the card in the player's hand
+     * @param cardPile  the pile where the card should be placed
+     * @throws InvalidCardException      if the resulting pile value exceeds 50
+     * @throws IllegalArgumentException  if the index is outside the hand’s bounds
      */
     @Override
     public void putCard(int indexCard, CardPile cardPile) throws InvalidCardException {
@@ -103,25 +140,26 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
 
         Card card = hand.get(indexCard);
         int newValue = card.getValue() + cardPile.getValuePile();
-        if(card.getSymbol().equals("A")){
-            if(card.getValue()+ cardPile.getValuePile() > 50 && card.getValue()-9 + cardPile.getValuePile() <= 50) {
-                newValue += -9;
+
+        // Handle Ace special case (value can be reduced by 9 if needed)
+        if (card.getSymbol().equals("A")) {
+            if (card.getValue() + cardPile.getValuePile() > 50 &&
+                    card.getValue() - 9 + cardPile.getValuePile() <= 50) {
+                newValue -= 9;
             }
         }
 
-        // Validate that the new pile value does not exceed 50
         if (newValue > 50) {
             throw new InvalidCardException(card, cardPile.getValuePile());
         }
 
-        // If valid, play the card
         hand.remove(indexCard);
         cardPile.addCard(card);
     }
 
     /**
-     * Clears the player's hand and draws 4 new cards from the deck.
-     * If the deck is empty, fewer than 4 cards may be drawn.
+     * Clears the player's hand and draws a fresh hand containing up to 4 cards.
+     * Fewer cards may be drawn if the deck is depleted.
      */
     @Override
     public void takeHand() {
@@ -135,9 +173,9 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     }
 
     /**
-     * Returns the current list of cards in the player's hand.
+     * Returns the current cards held by the player.
      *
-     * @return a list of cards currently held by the player
+     * @return a list of cards in the player's hand
      */
     @Override
     public List<Card> getHand() {
@@ -156,34 +194,41 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     /**
      * Updates the player's active state.
      *
-     * @param isPlaying the new state of the player
+     * @param isPlaying the new active status
      */
     void setIsPlaying(boolean isPlaying) {
         this.isPlaying = isPlaying;
     }
 
     /**
-     * Checks if the player has any playable cards that can be placed on the pile
-     * without exceeding a total value of 50.
-     * 
-     * If no valid cards exist, the player is marked as eliminated.
-     * 
+     * Determines whether the player has any legal moves available.
+     * <p>
+     * A legal move is one in which a card can be played without the pile value
+     * exceeding 50. Ace cards receive special handling due to their dual-value nature.
+     * </p>
+     * <p>
+     * If the player has no valid cards, they are automatically eliminated.
+     * </p>
      *
-     * @return {@code true} if the player has valid cards to play; {@code false} otherwise
+     * @return {@code true} if at least one card is playable; {@code false} otherwise
      */
     public boolean hasValidCards() {
-        int cont = 0;
+        int validCount = 0;
+
         for (Card card : hand) {
-            if(card.getSymbol().equals("A")) {
-                if(card.getValue()+ cardPile.getValuePile() <= 50 || card.getValue()-9 + cardPile.getValuePile() <= 50) {
-                    cont++;
+            int pileValue = cardPile.getValuePile();
+
+            if (card.getSymbol().equals("A")) {
+                if (card.getValue() + pileValue <= 50 ||
+                        card.getValue() - 9 + pileValue <= 50) {
+                    validCount++;
                 }
-            }
-            else if(card.getValue() + cardPile.getValuePile() <= 50) {
-                cont++;
+            } else if (card.getValue() + pileValue <= 50) {
+                validCount++;
             }
         }
-        boolean hasValid = cont > 0;
+
+        boolean hasValid = validCount > 0;
         if (!hasValid) {
             isPlaying = false;
         }
@@ -191,30 +236,36 @@ public abstract class AdapterPlayers extends Thread implements IPlayers {
     }
 
     /**
-     * Returns the player's current active state (duplicate accessor).
+     * Returns whether the player is still participating in the game.
+     * (Duplicate accessor maintained for compatibility.)
      *
-     * @return {@code true} if the player is still playing; {@code false} otherwise
+     * @return {@code true} if the player is still active; {@code false} otherwise
      */
     public boolean getIsplaying() {
         return isPlaying;
     }
 
     /**
-     * Returns the player's turn number.
+     * Returns the player's assigned turn number.
      *
-     * @return the player's turn identifier
+     * @return the numeric turn identifier
      */
     public int getTurn() {
         return turn;
     }
 
     /**
-     * Initializes the player by activating them and dealing an initial hand.
-     * Prints a confirmation message to the console.
+     * Initializes the player at the start of a match.
+     * <p>
+     * This method:
+     * </p>
+     * <ul>
+     *   <li>Marks the player as active</li>
+     *   <li>Draws an initial hand of cards</li>
+     * </ul>
      */
     public void initializePlayer() {
         isPlaying = true;
         takeHand();
-        System.out.println(" Player " + turn + " initialized with " + hand.size() + " cards");
     }
 }

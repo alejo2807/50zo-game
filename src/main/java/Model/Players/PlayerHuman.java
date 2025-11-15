@@ -5,18 +5,17 @@ import Model.Cards.Card;
 import Model.Cards.CardPile;
 import Model.Cards.Deck;
 import View.Eliminate;
-import View.GameWindow;
-import View.Messages;
+import View.ShowWiner;
 import javafx.application.Platform;
 import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
 
 /**
- * Represents a human player in the card game.
- *
- * This class extends {@link AdapterPlayers} and defines the interaction logic
- * for a user-controlled player. Unlike {@link PlayerGPU}, this class relies on
- * user input to play cards and end turns.
+ * Represents a human-controlled player in the card game.
+ * <p>
+ * This class extends {@link AdapterPlayers} and provides the interaction logic
+ * for real users through the graphical interface. Unlike {@link PlayerGPU},
+ * the human player waits for input from the UI before performing actions.
+ * </p>
  *
  * @author Juan-David-Brandon
  * @since 2025
@@ -24,23 +23,23 @@ import java.util.concurrent.CountDownLatch;
  */
 public class PlayerHuman extends AdapterPlayers {
 
-    /** The thread managing the player's actions (if used externally). */
+    /** The thread executing the player's main loop. */
     private Thread thread;
 
-    /** Index of the selected card in the player's hand. */
+    /** Index of the card selected by the user during their turn. */
     private int indexCard;
 
-    /** Indicates whether the player has finished their turn. */
+    /** Indicates whether the player has completed their turn. */
     private boolean turnFinished = false;
 
-    /** Reference to the game controller responsible for managing UI updates. */
+    /** Reference to the game controller responsible for UI updates. */
     private GameWindowController controller;
 
-    /** Flag indicating if the player has already won. */
+    /** Indicates whether the human player has already won the match. */
     private boolean isWin = false;
 
-    /** Instance used to display UI messages for win/lose or turn notifications. */
-    private Messages messages;
+    /** Window used to display turn, win, or elimination messages. */
+    private ShowWiner showWiner;
 
     /**
      * Constructs a new human player.
@@ -48,8 +47,9 @@ public class PlayerHuman extends AdapterPlayers {
      * @param deck        the main deck used to draw cards
      * @param myTurn      the player's assigned turn number
      * @param lock        shared synchronization object used for turn control
-     * @param turnManager the manager controlling player turns
-     * @param cardPile    the shared pile where cards are played
+     * @param turnManager the manager controlling turn order
+     * @param cardPile    the shared pile where cards are placed
+     * @param playerType  identifier for the player type
      */
     public PlayerHuman(Deck deck, int myTurn, Object lock, TurnManager turnManager, CardPile cardPile, String playerType) {
         super(deck, myTurn, lock, turnManager, cardPile, playerType);
@@ -58,160 +58,130 @@ public class PlayerHuman extends AdapterPlayers {
     }
 
     /**
-     * Alternative constructor for standalone initialization (used for testing or setup).
+     * Alternative constructor used for standalone initialization or testing.
      *
-     * @param deck the deck used to initialize the player
+     * @param deck deck used to initialize the player's hand
      */
     public PlayerHuman(Deck deck) {
         super(deck);
     }
 
     /**
-     * Main execution loop of the human player.
-     *
-     * This method runs in a separate thread, waiting for the player's turn to start.
-     * During its turn, it allows the user to play a card manually via the interface.
-     * The thread remains active while {@code isPlaying} is true.
+     * Main execution loop executed in the player's thread.
+     * <p>
+     * The human player waits until their turn begins. When it starts, the thread
+     * suspends until user interaction completes the turn. If the player is
+     * eliminated or the game ends, the loop stops.
+     * </p>
      */
     @Override
     public void run() {
-        System.out.println("👤 Human player thread started");
 
         while (isPlaying) {
             synchronized (lock) {
 
-                // VERIFICAR SI ES EL ÚNICO JUGADOR RESTANTE (GANADOR)
+                // Check if player is the last remaining (winner)
                 if (turnManager.getTotalTurns().size() == 1) {
-                    System.out.println("🏆 Human player is the only player left - WINNER!");
                     isPlaying = false;
                     lock.notifyAll();
                     break;
                 }
 
-                // Wait until it's the human player's turn
+                // Wait until it's this player's turn
                 while (isPlaying && turnManager.getActualTurn() != turn) {
                     try {
                         lock.wait();
                     } catch (InterruptedException e) {
-                        System.out.println("👤 Human player interrupted");
                         return;
                     }
                 }
 
-                // VERIFICAR DE NUEVO después de despertar
+                // Check again after waking up
                 if (turnManager.getTotalTurns().size() == 1) {
-                    System.out.println("🏆 Human player is the winner after waking up!");
                     isPlaying = false;
                     lock.notifyAll();
                     break;
                 }
 
-                // Verificar si sigue jugando después de despertar
+                // If the player is no longer active, exit safely
                 if (!isPlaying) {
-                    System.out.println("👤 Human player no longer playing, exiting cleanly");
-                    lock.notifyAll(); // ASEGURAR QUE OTROS THREADS DESPIERTEN
+                    lock.notifyAll();
                     break;
                 }
 
-                // If no valid cards are available, eliminate the player
+                // Eliminate the player if they have no valid cards
                 if (!hasValidCards()) {
-                    System.out.println("❌ Human player eliminated (no valid cards)");
-                    System.out.println("📊 Players before elimination: " + turnManager.getTotalTurns());
 
-                    // MOSTRAR VENTANA DE ELIMINACIÓN EN EL THREAD DE JAVAFX
                     Platform.runLater(() -> {
                         try {
                             Eliminate.getInstance().show();
                         } catch (IOException e) {
-                            System.err.println("❌ Error showing elimination window: " + e.getMessage());
                             e.printStackTrace();
                         }
                     });
 
                     returnCardsToDecK();
 
-                    // Actualizar la UI
                     Platform.runLater(() -> {
                         controller.notifyHumanEliminated();
                     });
 
-                    // ORDEN CRÍTICO: primero eliminar, luego pasar turno
                     turnManager.setLasTurnEliminate(turn);
-                    System.out.println("📊 Players after elimination: " + turnManager.getTotalTurns());
 
                     isPlaying = false;
 
-                    // Pasar el turno al siguiente jugador
                     turnManager.passTurn();
-                    System.out.println("➡️ Next turn after human elimination: " + turnManager.getActualTurn());
 
-                    // DESPERTAR A TODOS LOS THREADS (CRÍTICO)
-                    System.out.println("🔔 Human player notifying ALL threads to continue");
                     lock.notifyAll();
 
-                    // Pequeña pausa para asegurar que otros threads se despierten
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        // Ignore
                     }
 
                     break;
                 }
 
-
-                // Wait for the human player to play and draw a card
+                // Wait for the human player to perform an action
                 turnFinished = false;
-                System.out.println("👤 It's the human player's turn. Waiting for action...");
 
-                // Wait until the player finishes their turn
                 while (!turnFinished && turnManager.getActualTurn() == turn && isPlaying) {
                     try {
                         lock.wait();
                     } catch (InterruptedException e) {
-                        System.out.println("👤 Human player interrupted while waiting for action");
                         return;
                     }
                 }
-
-                System.out.println("👤 Human player finished their turn.");
             }
         }
-
-        System.out.println("💤 Human player thread finished");
     }
 
     /**
-     * Devuelve las cartas del jugador humano al mazo cuando es eliminado
+     * Returns all cards from the human player back to the deck when eliminated.
+     * <p>
+     * The deck is automatically reshuffled afterward.
+     * </p>
      */
     public void returnCardsToDecK() {
         if (hand.isEmpty()) {
-            System.out.println("⚠ Human player has no cards to return");
             return;
         }
 
-        int returnedCards = hand.size();
-        System.out.println("📤 Human player returns " + returnedCards + " cards to the deck");
-
-        // Add all cards back to the deck
         for (Card card : hand) {
             deck.getDeck().add(card);
         }
 
-        // Clear player's hand
         hand.clear();
-
-        // Shuffle the deck
         deck.shuffle();
-
-        System.out.println("🔀 Deck shuffled. Available cards: " + deck.getDeck().size());
     }
 
     /**
-     * Signals that the player has finished their turn.
-     *
-     * This method is typically called by the controller once the player
-     * has played a card and drawn a new one.
+     * Marks the player's turn as finished.
+     * <p>
+     * This method is typically triggered from the UI once the player selects
+     * a card and completes their move.
+     * </p>
      */
     public void finishTurn() {
         synchronized (lock) {
@@ -221,18 +191,18 @@ public class PlayerHuman extends AdapterPlayers {
     }
 
     /**
-     * Sets whether the player has finished their turn.
+     * Sets whether the player's turn is finished.
      *
-     * @param finished {@code true} if the player has completed their turn, {@code false} otherwise
+     * @param finished {@code true} if the turn is complete, {@code false} otherwise
      */
     public void setTurnFinished(boolean finished) {
         this.turnFinished = finished;
     }
 
     /**
-     * Sets the index of the card chosen by the player to play.
+     * Sets the index of the card selected by the human player.
      *
-     * @param indexCard the index of the selected card in the player's hand
+     * @param indexCard index of the chosen card in the player's hand
      */
     public void setIndexCard(int indexCard) {
         this.indexCard = indexCard;

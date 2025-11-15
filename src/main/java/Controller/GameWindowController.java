@@ -10,11 +10,11 @@ import Model.Players.PlayerHuman;
 import Model.Players.TakeWiner;
 import Model.Players.TurnManager;
 import View.GameWindow;
-import View.Messages;
 import View.SelectionPlayers;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -157,78 +157,73 @@ public class GameWindowController {
      * Used to enforce turn flow control.
      */
     private boolean cardPlayed = false;
+    /**
+     * object that take the player winer
+     */
 
     private TakeWiner takeWiner;
     /**
      * Sets the total number of GPU players for the game.
      *
-     * @param totalPlayersGPU the number of GPU players to include in the game
+     * @param totalPlayersGPU number of GPU players
      */
     public void getPlayersGPU(int totalPlayersGPU){
         this.totalPlayersGPU = totalPlayersGPU;
     }
 
     /**
-     * Initializes the game controller and all game components.
-     * This method sets up the deck, turn manager, players, card pile, and UI elements.
-     * It creates and starts all player threads (human and GPU), initializes the discard pile,
-     * and begins the game flow. The total number of turns is calculated as totalPlayersGPU + 1
-     * to include the human player.
+     * Initializes the game environment, including the deck, turn manager,
+     * players, pile, UI components, and player threads. This method prepares
+     * the entire interface and logic required for gameplay.
      *
-     * @throws IOException if an I/O error occurs during initialization
+     * @throws IOException if an error occurs during resource loading
      */
     @FXML
     public void initialize() throws IOException {
         deck = new Deck();
-        turnManager = new TurnManager(totalPlayersGPU+1);
-
-
+        turnManager = new TurnManager(totalPlayersGPU + 1);
         lock = new Object();
-        // Officially starts turn 1
+
         synchronized (lock) {
             turnManager.startGame();
             lock.notifyAll();
         }
+
         pile = new CardPile(deck);
         rechargeDeck = new RechargeDeck(deck, pile);
         rechargeDeck.start();
 
-
         playerGPUList = new ArrayList<>();
-        playerHuman = new PlayerHuman(deck, 1, lock, turnManager, pile,"YOU");
+        playerHuman = new PlayerHuman(deck, 1, lock, turnManager, pile, "YOU");
         playerHuman.initializePlayer();
-        for(int i = 2; i <= totalPlayersGPU+1; i++){
-            playerGPU = new PlayerGPU(deck, i, lock, turnManager, pile, this, "GPU "+Integer.toString(i-1));
+
+        for (int i = 2; i <= totalPlayersGPU + 1; i++) {
+            playerGPU = new PlayerGPU(deck, i, lock, turnManager, pile, this, "GPU " + (i - 1));
             playerGPUList.add(playerGPU);
             playerGPU.initializePlayer();
         }
+
         takeWiner = new TakeWiner(turnManager, lock, playerHuman, playerGPUList);
         takeWiner.start();
 
         printCardsHuman();
         printCardsGPU();
         updatePileImage(pile.getTopCard());
-
-        // Dynamically configure player labels visibility
         configureLabelVisibility();
         updateTurnLabel();
 
-        // Start all player threads
         playerHuman.start();
-        for(PlayerGPU playerGPU : playerGPUList){
-            playerGPU.start();
+        for (PlayerGPU g : playerGPUList) {
+            g.start();
         }
-        printCardsGPU();
     }
 
     /**
-     * Displays the human player's cards in the UI.
-     * Updates the ImageView elements in the playerCards HBox with the corresponding
-     * card images from the player's hand. If the hand has fewer than 4 cards,
-     * the remaining ImageViews are set to null.
+     * Displays the human player's hand on the UI.
+     * If the player has fewer than 4 cards, empty slots are shown.
      */
     public void printCardsHuman() {
-        if(playerHuman.getIsPlaying()){
+        if (playerHuman.getIsPlaying()) {
 
             for (int i = 0; i < 4; i++) {
                 ImageView imageView = (ImageView) playerCards.getChildren().get(i);
@@ -240,17 +235,14 @@ public class GameWindowController {
                 }
             }
 
-        }
-        else{
+        } else {
             playerCards.getChildren().clear();
         }
     }
 
     /**
-     * Displays the back side of cards for all active GPU players.
-     * For each active GPU player, this method creates or updates 4 ImageViews
-     * showing the card back image. If a GPU player is not currently playing,
-     * their card container is cleared.
+     * Displays the back image for each GPU player's cards.
+     * If a GPU player is out of the game, their display is cleared.
      */
     public void printCardsGPU() {
         List<HBox> boxes = List.of(cardsGPU1, cardsGPU2, cardsGPU3);
@@ -258,11 +250,9 @@ public class GameWindowController {
 
         for (int i = 0; i < playerGPUList.size(); i++) {
             HBox box = boxes.get(i);
-            PlayerGPU playerGPU = playerGPUList.get(i);
+            PlayerGPU gpu = playerGPUList.get(i);
 
-            // If the player is currently playing
-            if (playerGPU.getIsplaying()) {
-                // Ensure the HBox has 4 ImageViews
+            if (gpu.getIsplaying()) {
                 if (box.getChildren().isEmpty()) {
                     for (int k = 0; k < 4; k++) {
                         ImageView iv = new ImageView(backImage);
@@ -271,81 +261,60 @@ public class GameWindowController {
                         box.getChildren().add(iv);
                     }
                 } else {
-                    // Update existing ImageViews
-                    for (int j = 0; j < box.getChildren().size(); j++) {
-                        ImageView iv = (ImageView) box.getChildren().get(j);
-                        iv.setImage(backImage);
+                    for (Node child : box.getChildren()) {
+                        ((ImageView) child).setImage(backImage);
                     }
                 }
-            }
-            // If not playing, clear all cards
-            else {
+            } else {
                 box.getChildren().clear();
             }
         }
-        // Update labels dynamically
+
         configureLabelVisibility();
     }
+
     /**
-     * Elimina las cartas del jugador humano cuando es eliminado
+     * Hides the human player's cards when they are eliminated.
      */
     public void deleteCardsPlayer(){
-        // No verificar playerHuman, solo ocultar directamente
         playerCards.setVisible(false);
-
-
     }
+
+    /**
+     * Notifies the UI that the human player has been eliminated.
+     * Updates label style and hides their cards.
+     */
     public void notifyHumanEliminated() {
         Platform.runLater(() -> {
-            // Ocultar las cartas del jugador
             deleteCardsPlayer();
-
-            // Cambiar el estilo del label del jugador
             if (labelPlayer != null) {
                 labelPlayer.setText("Player ✖");
                 labelPlayer.setStyle("-fx-text-fill: #FF0000;");
             }
-
-
             updateTurnLabel();
-
-            System.out.println("👻 Human player eliminated - UI updated");
         });
     }
+
     /**
-     * Handles mouse click events on the human player's cards.
-     * This method validates that it's the player's turn and that they haven't already
-     * played a card this turn. It then attempts to play the selected card on the pile.
-     * If the card is valid, it updates the pile display and the player's hand.
-     * If invalid, an error message is displayed and the player must choose another card.
+     * Handles a mouse click on a human player's card. Ensures the turn is valid
+     * and the card has not been played yet. Attempts to play the selected card
+     * and updates the pile and UI.
      *
-     * @param event the mouse event triggered by clicking on a card
+     * @param event click event on a card
      */
     @FXML
     void handleCardClick(MouseEvent event) {
-        if (turnManager.getActualTurn() != playerHuman.getTurn()) {
-            System.out.println("⚠ No es tu turno.");
-            return;
-        }
+        if (turnManager.getActualTurn() != playerHuman.getTurn()) return;
+        if (cardPlayed) return;
 
-        if (cardPlayed) {
-            System.out.println("⚠ Ya jugaste una carta este turno.");
-            return;
-        }
+        ImageView clicked = (ImageView) event.getSource();
+        int index = playerCards.getChildren().indexOf(clicked);
 
-        ImageView clickedImage = (ImageView) event.getSource();
-        int index = playerCards.getChildren().indexOf(clickedImage);
-
-        // Verify the index is valid
-        if (index < 0 || index >= playerHuman.getHand().size()) {
-            System.out.println("⚠ Carta no válida.");
-            return;
-        }
+        if (index < 0 || index >= playerHuman.getHand().size()) return;
 
         playerHuman.setIndexCard(index);
 
         try {
-            // Attempt to play the card
             playerHuman.putCard(index, pile);
             cardPlayed = true;
 
@@ -357,79 +326,53 @@ public class GameWindowController {
             }
 
             printCardsHuman();
-            System.out.println(" Jugaste: " + top.getSymbol() + " | Nuevo valor pila: " + pile.getValuePile());
 
         } catch (InvalidCardException e) {
-            // Invalid card - show message and do nothing
-            System.out.println(e.getDetailedMessage());
-            // The card was NOT played, player must choose another
+            // Invalid card — silently ignored
         }
     }
 
     /**
-     * Handles the action of taking a card from the deck and passing the turn.
-     * This method is triggered by a button click and validates that it's the player's turn
-     * and that they have already played a card. If valid, the player draws a new card,
-     * their turn is finalized, and the turn passes to the next player.
+     * Handles the action of taking a new card from the deck and passing the turn.
      *
-     * @param event the action event triggered by the take card button
+     * @param event button click event
      */
     @FXML
     void takeCard(ActionEvent event) {
-        System.out.println("Mazo actual: " + deck.getDeck().size() + " cartas");
-
-        // Verify it's the human's turn
-        if (turnManager.getActualTurn() != playerHuman.getTurn()) {
-            System.out.println("⚠ No es tu turno.");
-            return;
-        }
-
-        if (!cardPlayed) {
-            System.out.println("⚠ Debes jugar una carta antes de tomar una nueva.");
-            return;
-        }
+        if (turnManager.getActualTurn() != playerHuman.getTurn()) return;
+        if (!cardPlayed) return;
 
         Card newCard = deck.getCard();
-        if (newCard == null) {
-            System.out.println("⚠ El mazo está vacío.");
-            return;
-        }
+        if (newCard == null) return;
 
         playerHuman.takeCard(newCard);
-        System.out.println(" Robaste: " + newCard.getSymbol() + " (valor=" + newCard.getValue() + ")");
         printCardsHuman();
 
-        // Finalize the human player's turn
         synchronized (lock) {
-            cardPlayed = false;         // Reset for next turn
-            playerHuman.finishTurn();   // Notify the thread that it's done
-            turnManager.passTurn();     // Move to next player
-            lock.notifyAll();           // Wake up all threads
+            cardPlayed = false;
+            playerHuman.finishTurn();
+            turnManager.passTurn();
+            lock.notifyAll();
         }
 
         updateTurnLabel();
-        System.out.println(" Turno pasado a jugador " + turnManager.getActualTurn());
     }
 
     /**
-     * Updates the visual representation of the card pile with the top card.
-     * Sets the pile ImageView to display the provided card and updates the
-     * value label with the current pile value.
+     * Updates the pile display with the current top card.
      *
-     * @param topCard the card currently on top of the pile
+     * @param topCard the top card of the pile
      */
     public void updatePileImage(Card topCard) {
         if (topCard != null) {
-            Image image = new Image(getClass().getResourceAsStream(topCard.getUrl()));
-            cardPile.setImage(image);
+            Image img = new Image(getClass().getResourceAsStream(topCard.getUrl()));
+            cardPile.setImage(img);
         }
         valuePile.setText(String.valueOf(pile.getValuePile()));
     }
 
     /**
-     * Updates the visual representation of the deck by removing the top layer.
-     * This method removes the last visual element from the deck stack to simulate
-     * cards being drawn from the deck.
+     * Updates the visual representation of the deck by removing one layer from the stack.
      */
     public void updateDeckVisual() {
         if (deckStack.getChildren().size() > 1) {
@@ -438,20 +381,13 @@ public class GameWindowController {
     }
 
     /**
-     * Configures the visibility of player labels based on active players.
-     * The human player label is always visible, while bot labels are only
-     * visible if the corresponding GPU player is active and currently playing.
+     * Shows only the labels of players currently in the game.
      */
     private void configureLabelVisibility() {
-        // Player always visible
-        if (labelPlayer != null) {
-            labelPlayer.setVisible(true);
-        }
+        if (labelPlayer != null) labelPlayer.setVisible(true);
 
-        // List of bot labels
         List<Label> botLabels = List.of(labelBot1, labelBot2, labelBot3);
 
-        // Configure visibility according to playerGPUList
         for (int i = 0; i < botLabels.size(); i++) {
             if (i < playerGPUList.size() && playerGPUList.get(i).getIsplaying()) {
                 botLabels.get(i).setVisible(true);
@@ -462,9 +398,7 @@ public class GameWindowController {
     }
 
     /**
-     * Updates the turn label to display the current player's turn.
-     * Shows "Player" for the human player's turn or "Bot N" for GPU players,
-     * where N is the bot number (1, 2, or 3).
+     * Updates the UI label to indicate whose turn it currently is.
      */
     private void updateTurnLabel() {
         int currentTurn = turnManager.getActualTurn();
@@ -472,31 +406,40 @@ public class GameWindowController {
         if (currentTurn == playerHuman.getTurn()) {
             turnLabel.setText("Your turn :)");
         } else {
-            // Bot's turn (turn 2, 3, or 4 = Bot 1, 2, or 3)
-            int botNumber = currentTurn - 1; // Turn 2 = Bot 1, Turn 3 = Bot 2, etc.
-            turnLabel.setText("Turno de: Bot " + botNumber);
-
+            int botNumber = currentTurn - 1;
+            turnLabel.setText("Turn: Bot " + botNumber);
         }
     }
 
     /**
-     * Notifies the UI of a bot turn change and updates the display accordingly.
-     * This method is called from GPU player threads and uses Platform.runLater
-     * to ensure UI updates occur on the JavaFX application thread.
+     * Notifies the UI that a bot turn has begun.
+     * Updates its cards and the turn label.
      */
     public void notifyBotTurnChange() {
-        javafx.application.Platform.runLater(() -> {
+        Platform.runLater(() -> {
             updateTurnLabel();
-            printCardsGPU(); // Also update cards
+            printCardsGPU();
         });
     }
-    @FXML
-    Button backButton, closeButton;
+
+    @FXML Button backButton, closeButton;
+
+    /**
+     * Returns to the player selection window.
+     *
+     * @throws IOException if the window cannot be reopened
+     */
     @FXML
     void back() throws IOException{
         GameWindow.destroyInstance();
         SelectionPlayers.getInstance().show();
     }
+
+    /**
+     * Closes the entire game window.
+     *
+     * @throws IOException if the window fails to close
+     */
     @FXML
     void close() throws IOException {
         GameWindow.destroyInstance();

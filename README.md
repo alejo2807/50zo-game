@@ -1,304 +1,206 @@
-# 50zo Game / Juego 50zo
+# Cincuentazo (50zo Game)
 
-ENGLISH
-=======
+Cincuentazo is a small card game project implemented as a desktop application using JavaFX. It is a poker-like survival game in which human and AI players use cards to keep the table sum at or below 50. The project is designed and implemented following MVC architecture, event-driven programming, multithreading for concurrency, robust exception handling, and unit testing with JUnit 5.
 
-Project: 50zo Game
-A short tagline: Fast, fun, and addictive (replace with a one-line description of your project).
+---
 
-Description
------------
-50zo Game is [brief description placeholder — e.g., "a 2D arcade-style game built with <engine/library> where players ..."]. Replace this paragraph with a concise explanation of the game's objective, genre, and scope.
+## Table of Contents
 
-Features
---------
-- Feature 1 — e.g., Single-player arcade mode
-- Feature 2 — e.g., Multiple levels and power-ups
-- Feature 3 — e.g., Responsive controls, pixel art graphics
-- Feature 4 — e.g., Local high score saving
-
-Tech stack
-----------
-- Engine / Framework: <e.g., Unity / Godot / Phaser / LibGDX / plain HTML5 + JS>
-- Languages: <e.g., C#, GDScript, TypeScript, JavaScript, Java, etc.>
-- Build tools: <npm, gradle, dotnet, export pipeline, etc.>
-- Assets: <sprites, audio formats, license info>
-
-Table of Contents
------------------
+- Project overview
+- Game rules
+  - Objective
+  - Card values
+  - Preparation (setup)
+  - Turn flow
+  - Deck and table management
+  - Elimination and end of game
+- Technical goals and learning objectives
+- Architecture & design
+- Requirements
 - Installation
-- Running locally
-- Controls / How to play
-- Building / Packaging
-- Tests
+- Running the game
+- How to play / Controls
+- Testing
 - Contributing
-- License
-- Authors / Credits
-- Contact
-- Troubleshooting
+- Code style, documentation & exceptions
+- Authors 
 
-Requirements
-------------
-- OS: Windows / macOS / Linux (specify)
-- Runtime: <e.g., Node >= 14, Java 11, .NET 6, Godot 3.x/4.x, Unity 2021.x>
-- Other: <list any libraries / SDKs / tools>
 
-Installation
-------------
-1. Clone the repo
+---
+
+## Project overview
+
+Cincuentazo (English: "Fifty-something") is a turn-based card game for 2–4 players (1 human + 1–3 AI opponents). Each player maintains a hand of four cards and plays cards on their turn to modify a running sum on the table. The running sum must never exceed 50; players who cannot play a card without exceeding 50 are eliminated. The last remaining player wins.
+
+This mini-project is intended as an exercise to apply:
+- JavaFX UI development (layouts and event handling)
+- MVC architecture (Model–View–Controller)
+- Event-driven programming with mouse and keyboard events
+- Threading for concurrency (e.g., AI timers, turn manager)
+- Custom exceptions and robust error handling
+- JUnit 5 automated unit tests
+- Professional code management with Git and GitHub
+- Javadoc documentation in English
+
+---
+
+## Game rules
+
+### Objective
+Be the last player remaining in the game.
+
+### Card values and behavior
+- Cards numbered 2 through 8 and the 10: add their face value to the table sum (e.g., 2 adds 2, 10 adds 10).
+- Card 9: neutral — neither adds nor subtracts (no effect).
+- Face cards J, Q, K: subtract 10 from the table sum.
+- Ace (A): can count as either +1 or +10 — player (or AI) chooses the value that is most advantageous without exceeding 50.
+
+The main rule: the table sum must not exceed 50. If a play would cause the sum to go above 50 (>50), that play is invalid and cannot be chosen.
+
+### Preparation (setup)
+1. From a shuffled deck, deal 4 random cards to each player:
+   - AI players receive their 4 cards face-down.
+   - The human player receives their 4 cards face-up (visible).
+2. Place one random card face-up on the table; this card initializes the table sum.
+   - Note: the table sum may start as 0 (if the initial card is a 9), 1 (if the initial card is an Ace counted as 1), or -10 (if the initial card is J/Q/K).
+3. The remaining cards remain as the draw deck (face-down).
+
+The human player starts the first turn.
+
+### Turn flow
+- Players take turns in clockwise order.
+- On a player's turn:
+  1. The player selects a card from their hand that, when applied to the current table sum (added or subtracted using the card's rules), does not cause the table sum to exceed 50.
+  2. The chosen card is placed face-up on the table on top of the previous table card and the table sum is updated accordingly (apply +, −, or neutral).
+  3. The player then draws the top card from the draw deck so that they always end their turn with 4 cards in hand.
+- If a player cannot play any card from their hand without making the table sum exceed 50, that player is eliminated immediately.
+
+### Deck and table management
+- If the draw deck becomes empty, shuffle the table cards except for the last-played card (the current top of the table) and place them face-down to replenish the draw deck. The table sum remains unchanged.
+- When a player is eliminated, their remaining cards are sent to the bottom of the draw deck and become available for future draws.
+
+### End of game
+The last player who has not been eliminated wins the game.
+
+---
+
+
+## Requirements
+
+- Java Development Kit (JDK) 11 or higher (JDK 17 recommended).
+- JavaFX 11+ (or matching JavaFX version for your JDK).
+- Build tool: Gradle or Maven (project distribution may specify one).
+- JUnit 5 for unit testing.
+- Git for version control.
+
+---
+
+## Installation
+
+1. Clone the repository:
    git clone https://github.com/alejo2807/50zo-game.git
-2. Change directory
+2. Enter the project directory:
    cd 50zo-game
-3. Install dependencies (if applicable)
-   - npm: npm install
-   - pip: pip install -r requirements.txt
-   - other: describe
+3. Install dependencies and build (examples — use the build tool used in the project):
+   - Gradle (recommended):
+     - ./gradlew build
+     - ./gradlew run
+   - Maven:
+     - mvn clean install
+     - mvn javafx:run
 
-Running locally
----------------
-- Development / run command examples:
-  - npm: npm start
-  - Unity: open the project in Unity and press Play
-  - Godot: godot --path ./ -e
-  - Java: ./gradlew run
-- Configuration: describe any environment variables or config files (e.g., config.json)
+Note: Ensure JavaFX modules are available to your chosen build configuration. If using a modular setup, configure VM options to include JavaFX modules.
 
-How to play / Controls
-----------------------
-Objective:
-- Describe the player's goal (e.g., "Collect 50 coins, survive waves of enemies, reach the highest score").
+---
 
-Basic controls (examples — update to match your game):
-- Move: Arrow keys / WASD
-- Jump: Space
-- Shoot / Action: Z / Left click
-- Pause: Esc
+## Running the game (development)
 
-Scoring / Lives / Power-ups:
-- Explain scoring rules, lives system, level progression, and power-ups.
+- From the IDE:
+  - Import the project as a Gradle/Maven project.
+  - Configure JavaFX SDK in project settings.
+  - Run the main application class.
+- From command line (example with Gradle):
+  - ./gradlew run
+- From command line (example with Maven + javafx-maven-plugin):
+  - mvn javafx:run
 
-Assets
-------
-- Where assets live: /assets or /resources
-- Licensing: list licenses for any third-party assets (sprites, audio, fonts)
-- If there are proprietary assets, note how to replace them.
+Adjust commands to match the actual artifact and main class in the repository.
 
-Building / Packaging
---------------------
-- Production build commands:
-  - npm: npm run build
-  - Unity: Build → choose target platform
-  - Godot: export via project export templates
-- Where build artifacts appear (e.g., /dist, /build, /export)
+---
 
-Testing
--------
-- Unit and integration tests:
-  - npm: npm test
-  - Other frameworks: describe
-- How to run automated tests and expected results
+## How to play 
 
-Contributing
-------------
-Thank you for wanting to contribute! Please:
-1. Fork the repository
-2. Create a branch: git checkout -b feature/my-feature
-3. Commit your changes: git commit -m "Add my feature"
-4. Push and open a pull request
+Objective: survive by playing cards that keep the table sum ≤ 50. The human player may start with their 4 face-up cards visible.
 
-Guidelines:
-- Follow the code style used in the project
-- Include tests for new features or bug fixes
-- Explain breaking changes in the PR description
+Suggested controls (actual controls may vary per implementation):
+- Mouse:
+  - Click a card in your hand to select and play it.
+  - Click deck to view top card (if a feature exists).
 
-Code style / Linting
---------------------
-- Mention tools used (eslint, prettier, clang-format) and how to run them (e.g., npm run lint)
+Game tips:
+- Use Ace intelligently (1 or 10) depending on current table sum.
+- J/Q/K reduce the table sum by 10 — useful if the sum is close to 50.
+- 9 is neutral — useful as a pause move to avoid busting.
+- Maintain awareness of the number of cards left in the draw deck to anticipate re-shuffles.
 
-License
--------
-Specify the license used by the repo, e.g.:
-- MIT License — see LICENSE file
-- GPL-3.0 — see LICENSE file
+---
 
-Authors & Credits
------------------
-- Main author / maintainer: alejo2807 (GitHub: https://github.com/alejo2807)
-- Contributors: list contributors here
-- Special thanks / third-party assets credits
+## Testing
 
-Contact
--------
-For issues and questions, open an issue on GitHub or contact:
-- Author email: <your-email@example.com>
-- GitHub: https://github.com/alejo2807
+- Unit tests implemented with JUnit 5 should cover:
+  - Card value calculations and Ace logic (1 vs 10).
+  - Deck shuffle and draw behavior.
+  - Table sum updates and validation (no >50).
+  - Elimination conditions and deck replenishment rules.
+- Run tests:
+  - Gradle: ./gradlew test
+  - Maven: mvn test
 
-Troubleshooting
----------------
-- Common problems and quick fixes (e.g., dependency mismatches, engine version mismatches)
-- How to report a bug (describe steps to reproduce, expected vs actual behavior, environment)
+Create at least three test classes that together assert core game mechanics and edge cases.
 
-Roadmap / Known issues
-----------------------
-- Short-term: list planned features or improvements
-- Long-term: bigger ambitions
-- Known issues: list bugs or limitations
+---
 
-Spanish (ESPAÑOL)
-=================
+## Contributing
 
-Proyecto: 50zo Game
-Una etiqueta corta: Rápido, divertido y adictivo (reemplaza con una descripción de una línea).
+Thank you for considering contributing!
 
-Descripción
------------
-50zo Game es [descripción breve — p. ej. "un juego arcade 2D creado con <motor/librería> donde los jugadores ..."]. Sustituye este párrafo por una explicación concisa del objetivo, género y alcance del juego.
+Basic workflow:
+1. Fork the repository.
+2. Create a feature branch: git checkout -b feature/my-feature
+3. Commit changes with clear messages: git commit -m "Add AI decision logic"
+4. Push and open a Pull Request.
 
-Características
----------------
-- Característica 1 — p. ej., Modo arcade para un jugador
-- Característica 2 — p. ej., Varios niveles y potenciadores
-- Característica 3 — p. ej., Controles precisos, gráficos pixel art
-- Característica 4 — p. ej., Guardado local de puntuaciones
+Please:
+- Follow existing code style and layout conventions.
+- Add or update Javadoc for public classes/methods.
+- Add unit tests for new logic.
+- Document breaking changes in the PR description.
 
-Tecnologías
------------
-- Motor / Framework: <p. ej., Unity / Godot / Phaser / LibGDX / HTML5 + JS>
-- Lenguajes: <p. ej., C#, GDScript, TypeScript, JavaScript, Java, etc.>
-- Herramientas de build: <npm, gradle, dotnet, etc.>
-- Assets: <sprites, audio, información de licencia>
+---
 
-Tabla de contenidos
-------------------
-- Instalación
-- Ejecutar localmente
-- Controles / Cómo jugar
-- Compilar / Empaquetar
-- Pruebas
-- Contribuir
-- Licencia
-- Autores / Créditos
-- Contacto
-- Solución de problemas
+## Code style, documentation & exceptions
 
-Requisitos
-----------
-- Sistema operativo: Windows / macOS / Linux (especificar)
-- Runtime: <p. ej., Node >= 14, Java 11, .NET 6, Godot 3.x/4.x, Unity 2021.x>
-- Otros: <bibliotecas / SDKs necesarios>
+- Document public API and important methods with Javadoc in English.
+- Use custom exceptions to represent game-specific errors:
+  - Example checked exceptions (e.g., InvalidPlayException).
+  - Example unchecked exceptions for programmer errors where appropriate.
+- Use code formatting tools (e.g., Checkstyle, Spotless, or editorconfig) as configured by the project.
 
-Instalación
-----------
-1. Clona el repositorio
-   git clone https://github.com/alejo2807/50zo-game.git
-2. Entra al directorio
-   cd 50zo-game
-3. Instala dependencias (si aplica)
-   - npm: npm install
-   - pip: pip install -r requirements.txt
-   - otro: describir
+---
 
-Ejecutar localmente
-------------------
-- Comandos de desarrollo / ejecución:
-  - npm: npm start
-  - Unity: abrir el proyecto en Unity y presionar Play
-  - Godot: godot --path ./ -e
-  - Java: ./gradlew run
-- Configuración: describe variables de entorno o archivos de config (p. ej., config.json)
+## Authors 
 
-Cómo jugar / Controles
-----------------------
-Objetivo:
-- Describe la meta del jugador (p. ej., "Recolecta 50 monedas, sobrevive a oleadas de enemigos, alcanza la mejor puntuación").
+- Authors: Juan - David - Brandon.
 
-Controles básicos (ejemplos — actualiza según tu juego):
-- Mover: teclas de flecha / WASD
-- Saltar: Barra espaciadora
-- Disparar / Acción: Z / Click izquierdo
-- Pausa: Esc
+For questions or bug reports, open an issue in the GitHub repository.
 
-Puntuación / Vidas / Potenciadores:
-- Explica reglas de puntuación, sistema de vidas, progresión de niveles y potenciadores.
+---
 
-Assets
-------
-- Dónde están los assets: /assets o /resources
-- Licencias: lista de licencias de assets de terceros (sprites, audio, tipografías)
-- Si hay assets propietarios, explica cómo reemplazarlos.
+## Notes & implementation hints
 
-Compilar / Empaquetar
----------------------
-- Comandos de build:
-  - npm: npm run build
-  - Unity: Build → seleccionar plataforma
-  - Godot: exportar con plantillas de exportación
-- Dónde aparecen los artefactos de build (p. ej., /dist, /build, /export)
+- When implementing AI players, give them a short thinking delay (use a separate thread) to improve UX. Ensure UI updates are done on the JavaFX Application Thread.
+- When reshuffling table cards back into the deck, preserve the current top-of-table card and recalculate or preserve the table sum accordingly (do not modify the current table sum when reshuffling).
+- Ensure thread-safe access to shared game state (deck, table, players) using synchronization or higher-level concurrency utilities.
+- Design unit tests to simulate edge conditions: empty deck, multiple consecutive eliminations, Ace choices near the 50 threshold.
 
-Pruebas
--------
-- Tests unitarios e integración:
-  - npm: npm test
-  - Otros frameworks: describir
-- Cómo ejecutar tests automáticos y qué resultados esperar
-
-Contribuir
----------
-¡Gracias por querer contribuir! Por favor:
-1. Fork del repositorio
-2. Crea una rama: git checkout -b feature/mi-feature
-3. Haz commit: git commit -m "Añade mi feature"
-4. Push y abre un pull request
-
-Pautas:
-- Sigue el estilo de código del proyecto
-- Incluye tests para nuevas funciones o correcciones
-- Explica cambios que rompan compatibilidad en la descripción del PR
-
-Estilo de código / Linting
---------------------------
-- Herramientas usadas (eslint, prettier, clang-format) y cómo ejecutarlas (p. ej., npm run lint)
-
-Licencia
---------
-Especifica la licencia, p. ej.:
-- MIT — ver archivo LICENSE
-- GPL-3.0 — ver archivo LICENSE
-
-Autores y créditos
-------------------
-- Autor principal / mantenedor: alejo2807 (GitHub: https://github.com/alejo2807)
-- Colaboradores: lista de colaboradores
-- Agradecimientos / créditos por assets de terceros
-
-Contacto
--------
-Para issues y preguntas abre un issue en GitHub o contacta:
-- Email del autor: <tu-email@ejemplo.com>
-- GitHub: https://github.com/alejo2807
-
-Solución de problemas
----------------------
-- Problemas comunes y soluciones rápidas (p. ej., versiones de dependencias, incompatibilidades del motor)
-- Cómo reportar un bug (pasos para reproducir, comportamiento esperado vs real, entorno)
-
-Roadmap / Problemas conocidos
------------------------------
-- Corto plazo: lista de mejoras planeadas
-- Largo plazo: objetivos mayores
-- Problemas conocidos: errores o limitaciones actuales
-
-Placeholders
-------------
-Please replace all placeholders (anything in angle brackets like <...> or bracketed notes) with project-specific values: engine, language, build commands, screenshots, badges, demo links, and license type.
-
-Screenshots / Demo
-------------------
-- Add screenshots to /docs or /assets/screenshots and reference them here.
-- Add a demo GIF or link to an online build / itch.io page if available.
-
-Translation note
-----------------
-This README provides both English and Spanish versions. Keep both sections synchronized when updating.
-
-Thank you for the project — update the placeholders above with concrete details and I can produce a finalized README or generate README badges, a shorter landing README, or a version optimized for GitHub release notes.
+---

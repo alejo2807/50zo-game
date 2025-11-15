@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @since 2025
  */
 public class TurnManager {
-    /** Current active turn identifier (corresponds to the player’s number). */
+    /** Current active turn identifier (corresponds to the player's number). */
     private int actualTurn;
 
     /** Total number of players at the start of the game. */
@@ -24,7 +24,7 @@ public class TurnManager {
     /** Counter of players who have been eliminated from the game. */
     private int playersEliminate = 0;
 
-    /** List of all players’ turn identifiers still in the game. */
+    /** List of all players' turn identifiers still in the game. */
     private ArrayList<Integer> totalTurns;
 
     /** Iterator that tracks the current position within the list of turns. */
@@ -37,7 +37,7 @@ public class TurnManager {
      * @param totalPlayers total number of players participating in the game
      */
     public TurnManager(int totalPlayers) {
-        actualTurn = 0; // Starts with no active turn assigned
+        actualTurn = 0;
         this.totalPlayers = totalPlayers;
         totalTurns = new ArrayList<>();
         for (int i = 1; i <= totalPlayers; i++) {
@@ -49,7 +49,7 @@ public class TurnManager {
     /**
      * Returns the current active turn identifier.
      *
-     * @return the current player’s turn number
+     * @return the current player's turn number
      */
     public synchronized int getActualTurn() {
         return actualTurn;
@@ -62,16 +62,21 @@ public class TurnManager {
      * {@code totalTurns}.
      */
     public synchronized void passTurn() {
-        System.out.println(totalTurns);
+        System.out.println("🔄 Passing turn. Current turns: " + totalTurns);
+
+        // Si solo queda un jugador, no avanzar más
+        if (totalTurns.size() <= 1) {
+            System.out.println("🏆 Only one player remains, no need to pass turn");
+            return;
+        }
+
         iterator++;
-        if (iterator == totalTurns.size() || iterator > totalTurns.size()) {
+        if (iterator >= totalTurns.size()) {
             iterator = 0;
         }
 
-        System.out.println(iterator);
         actualTurn = totalTurns.get(iterator);
-
-        System.out.println(" TurnManager.passTurn(): New turn = " + actualTurn + " | Iterator: " + iterator);
+        System.out.println("➡️ TurnManager.passTurn(): New turn = " + actualTurn + " | Iterator: " + iterator);
     }
 
     /**
@@ -79,30 +84,46 @@ public class TurnManager {
      */
     public synchronized void startGame() {
         actualTurn = 1;
-        System.out.println(" TurnManager.startGame(): Game started, current turn = " + actualTurn);
+        System.out.println("🎮 TurnManager.startGame(): Game started, current turn = " + actualTurn);
     }
 
     /**
-     * Removes a player’s turn from the active list when they are eliminated.
+     * Removes a player's turn from the active list when they are eliminated.
      * This method also ensures that the iterator position remains valid after
      * removal, preventing skipped or repeated turns.
      *
      * @param lasTurnEliminate the turn number corresponding to the eliminated player
      */
     public synchronized void setLasTurnEliminate(int lasTurnEliminate) {
+        System.out.println("❌ Attempting to eliminate player " + lasTurnEliminate);
+
         for (int i = 0; i < this.totalTurns.size(); i++) {
             if (this.totalTurns.get(i) == lasTurnEliminate) {
 
-                // Adjust iterator if the removed turn is before or at the current index
+                // Adjust iterator BEFORE removing
                 if (i < iterator) {
+                    // El jugador eliminado está antes del iterador actual
                     iterator--;
                 } else if (i == iterator) {
+                    // El jugador eliminado ES el turno actual
+                    // No decrementar porque passTurn() incrementará
                     iterator--;
                 }
 
                 totalTurns.remove(i);
-                System.out.println(" Player " + lasTurnEliminate + " eliminated. Remaining turns: " + totalTurns);
-                break; // Important to exit after removing
+                playersEliminate++;
+
+                System.out.println("✅ Player " + lasTurnEliminate + " eliminated.");
+                System.out.println("📊 Remaining turns: " + totalTurns);
+                System.out.println("📊 Iterator position: " + iterator);
+                System.out.println("📊 Total eliminated: " + playersEliminate);
+
+                // Si solo queda un jugador, es el ganador
+                if (totalTurns.size() == 1) {
+                    System.out.println("🏆 WINNER DETECTED: Player " + totalTurns.get(0));
+                }
+
+                break;
             }
         }
     }
@@ -112,7 +133,25 @@ public class TurnManager {
      *
      * @return an {@code ArrayList<Integer>} containing the remaining player turns
      */
-    public ArrayList<Integer> getTotalTurns() {
+    public synchronized ArrayList<Integer> getTotalTurns() {
         return totalTurns;
+    }
+
+    /**
+     * Returns the total number of players eliminated.
+     *
+     * @return the count of eliminated players
+     */
+    public synchronized int getPlayersEliminate() {
+        return playersEliminate;
+    }
+
+    /**
+     * Returns the total number of players at game start.
+     *
+     * @return the initial player count
+     */
+    public synchronized int getTotalPlayers() {
+        return totalPlayers;
     }
 }

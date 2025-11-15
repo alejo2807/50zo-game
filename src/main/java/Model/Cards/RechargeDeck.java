@@ -74,7 +74,7 @@ public class RechargeDeck extends Thread {
                 Thread.sleep(500);
 
                 synchronized (deck) {
-                    if (deck.getDeck().isEmpty()) {
+                    if (deck.getDeck().size()==2) {
                         // Get cards from the bottom (except the top card)
                         List<Card> backCards = cardPile.getBackCards(); // this method excludes the top card
                         if (!backCards.isEmpty()) {

@@ -14,20 +14,7 @@
     -fx-opacity: 1;
 }
 
-/* === Simulación de mazo (deck) === */
-.deck-card {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0, 3, 3);
-}
 
-/* Crea separación visual entre las capas del mazo */
-#deck-stack .image-view {
-    -fx-translate-y: 0;
-}
-
-/* Base para todas las cartas del mazo */
-.deckCard {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 8, 0, 3, 3);
-}
 
 
 //* ==== Estilo base del botón transparente con imagen ==== */
